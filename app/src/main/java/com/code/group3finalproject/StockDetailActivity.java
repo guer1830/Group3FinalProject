@@ -156,6 +156,7 @@ public class StockDetailActivity extends AppCompatActivity {
             try {
                 Stock stock = null;
 
+                //https://github.com/sfuhrm/yahoofinance-api
                 switch (this.command) {
                     case INFO:
                         stock = YahooFinance.get(this.symbol);
