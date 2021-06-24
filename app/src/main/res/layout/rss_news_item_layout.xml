@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:id="@+id/recyclerLayout">
+
+    <ImageView
+        android:id="@+id/recycleObjectImage"
+        android:layout_width="100dp"
+        android:layout_height="160dp"
+        android:layout_alignStart="@+id/recyclerLayout"
+        android:layout_alignParentTop="@+id/recyclerLayout"
+        app:srcCompat="?attr/actionModePasteDrawable"
+        tools:ignore="NotSibling"
+        android:contentDescription="@string/myContentString">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/recycleObjectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_toEndOf="@id/recycleObjectImage"
+        android:textStyle="bold|italic">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:id="@+id/recycleObjectDescription"
+        android:layout_toEndOf="@id/recycleObjectImage"
+        android:layout_below="@id/recycleObjectTitle">
+    </TextView>
+
+</RelativeLayout>
