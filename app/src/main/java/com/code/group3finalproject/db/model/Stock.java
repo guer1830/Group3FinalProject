@@ -10,18 +10,20 @@ import org.jetbrains.annotations.NotNull;
 @Entity
 public class Stock {
 
+    @NotNull
+    @NonNull
     @PrimaryKey
     private String symbol;
 
-    public Stock(String symbol) {
+    public Stock(@NotNull String symbol) {
         this.symbol = symbol;
     }
 
-    public String getSymbol() {
+    public @NotNull String getSymbol() {
         return this.symbol;
     }
 
-    public void setSymbol(String symbol) {
+    public void setSymbol(@NotNull String symbol) {
         this.symbol = symbol;
     }
 
