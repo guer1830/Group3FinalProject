@@ -5,4 +5,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="myContentString">TODO</string>
     <string name="RSSFeedManagementText">Manage RSS Feeds</string>
+    <string name="stock_symbol">Stock Symbol</string>
 </resources>

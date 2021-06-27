@@ -2,6 +2,7 @@ package com.code.group3finalproject.db.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,20 +11,21 @@ import org.jetbrains.annotations.NotNull;
 @Entity
 public class Stock {
 
-    @NotNull
-    @NonNull
     @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "symbol")
     private String symbol;
 
-    public Stock(@NotNull String symbol) {
+    public Stock(@NonNull String symbol) {
         this.symbol = symbol;
     }
 
-    public @NotNull String getSymbol() {
+    @NotNull
+    public String getSymbol() {
         return this.symbol;
     }
 
-    public void setSymbol(@NotNull String symbol) {
+    public void setSymbol(@NonNull String symbol) {
         this.symbol = symbol;
     }
 
@@ -39,7 +41,6 @@ public class Stock {
     }
 
     @NonNull
-    @NotNull
     @Override
     public String toString() {
         return "Stock{" +
