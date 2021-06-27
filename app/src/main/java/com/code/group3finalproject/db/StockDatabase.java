@@ -21,10 +21,10 @@ public abstract class StockDatabase extends RoomDatabase {
         }
         return stockDB;
     }
-
+//TODO:Take out allowMainTheadQuery and execute in background thread.
     private static StockDatabase buildDatabaseInstance(Context context) {
         return Room.databaseBuilder(context, StockDatabase.class, "StockDB.db")
-                .enableMultiInstanceInvalidation().build();
+                .allowMainThreadQueries().enableMultiInstanceInvalidation().build();
     }
 
     public void cleanUp() {

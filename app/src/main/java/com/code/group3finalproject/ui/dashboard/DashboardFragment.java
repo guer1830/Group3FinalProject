@@ -1,5 +1,6 @@
 package com.code.group3finalproject.ui.dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +20,18 @@ import com.code.group3finalproject.R;
 import com.code.group3finalproject.RSSFeedRecyclerViewAdapter;
 import com.code.group3finalproject.StockRecycleAdapter;
 import com.code.group3finalproject.databinding.FragmentDashboardBinding;
+import com.code.group3finalproject.db.StockDatabase;
 import com.code.group3finalproject.db.dao.StockDAO;
 import com.code.group3finalproject.db.model.Stock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private com.code.group3finalproject.StockRecycleAdapter StockRecycleAdapter;
-
-    ArrayList<String> stocks;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -40,25 +41,32 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        stocks = new ArrayList<>();
-        stocks.add("AAPL");
-        stocks.add("IBM");
-        stocks.add("MSFT");
+        StockDatabase db = StockDatabase.getInstance(root.getContext());
+
+        List<Stock> stockList = db.getStockDAO().getAll();
+
+        if (stockList.isEmpty()) {
+            createInitialData(root.getContext());
+            stockList = db.getStockDAO().getAll();
+        }
 
         final RecyclerView recyclerView = binding.stockList;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        StockRecycleAdapter = new StockRecycleAdapter(stocks);
+        StockRecycleAdapter = new StockRecycleAdapter(stockList);
         //StockRecycleAdapter.setClickListener(this);
         recyclerView.setAdapter(StockRecycleAdapter);
 
-       /*final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
         return root;
+    }
+
+    private void createInitialData(Context context) {
+        StockDatabase db = StockDatabase.getInstance(context);
+        Stock stock1 = new Stock("AAPL");
+        db.getStockDAO().insert(stock1);
+        Stock stock2 = new Stock("IBM");
+        db.getStockDAO().insert(stock2);
+        Stock stock3 = new Stock("MSFT");
+        db.getStockDAO().insert(stock3);
     }
 
     @Override

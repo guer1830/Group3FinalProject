@@ -2,12 +2,15 @@ package com.code.group3finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -39,6 +42,13 @@ public class StockDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_detail);
+
+        //TODO:Connect Stock Symbol with activity
+        Intent intent = getIntent();
+        if (intent.hasExtra("StockSymbol")) {
+            String stockSymbol = intent.getStringExtra("StockSymbol");
+            Log.d(getClass().getSimpleName(),stockSymbol);
+        }
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setVisibility(View.VISIBLE);
