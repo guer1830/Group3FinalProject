@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Xml;
 
+import com.code.group3finalproject.RSSClasses.RSSManagedClasses;
+import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 import com.code.group3finalproject.RSSClasses.RSSNewsObject;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -17,9 +19,11 @@ import java.util.ArrayList;
 public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     private ArrayList<RSSNewsObject> recyclerObjects;
     private RSSFeedRecyclerViewAdapter recyclerAdapter;
+    private RSSManagedClasses manager;
 
-    public fetchRSSFeeds(RSSFeedRecyclerViewAdapter adapter){
+    public fetchRSSFeeds(RSSFeedRecyclerViewAdapter adapter, RSSManagedClasses manager){
         this.recyclerAdapter = adapter;
+        this.manager = manager;
     }
 
     @Override
@@ -29,18 +33,25 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... voids) {
+        this.recyclerObjects = new ArrayList<>();
         try{
-            //Iterate over each selected RSS Feed
+            //Get the feeds that are selected
+            ArrayList<RSSNewsFeed> selectedFeeds = manager.getSelectedFeeds();
 
-            String urlString = "https://www.cnbc.com/id/10001054/device/rss/rss.html";
-            URL url = new URL(urlString);
-            InputStream inputStream = url.openConnection().getInputStream();
-            this.recyclerObjects = parseXMLFeed(inputStream);
-            return true;
+            for(RSSNewsFeed feed: selectedFeeds){
+                String urlString = feed.getRSSFeedURL();
+                URL url = new URL(urlString);
+                InputStream inputStream = url.openConnection().getInputStream();
+                this.recyclerObjects.addAll(parseXMLFeed(inputStream));
+                return true;
+            }
         }
         catch (IOException | XmlPullParserException e){
             Log.e("Error","Error",e);
         }
+
+        //Sort the feed based on the publication date
+
         return false;
     }
 
@@ -67,7 +78,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
             feedParser.setInput(inputStream,null);
 
             //Advance into the main XML body
-            //feedParser.nextTag();
+            feedParser.nextTag();
             while(feedParser.next() != XmlPullParser.END_DOCUMENT){
                 int eventType = feedParser.getEventType();
                 String tagName = feedParser.getName();
@@ -146,7 +157,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     }
 
 
-    private Boolean checkIfObjectIsReady(RSSNewsObject object, String title, String description, String articlLink, String imageLink, String publicationDate){
+    private Boolean checkIfObjectIsReady(RSSNewsObject object, String title, String description, String articleLink, String imageLink, String publicationDate){
         Boolean isReady = true;
         if (object.isTitleRequired()){
             isReady = (isReady & title != null);
@@ -155,7 +166,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
             isReady = (isReady & description != null);
         }
         if (object.isArticleLinkRequired()){
-            isReady = (isReady & articlLink != null);
+            isReady = (isReady & articleLink != null);
         }
         if (object.isImageRequired()){
             isReady = (isReady & imageLink != null);

@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
-        android:text="@string/RSSFeedManagementText" />
+        android:text="@string/RSSFeedManagementText"
+        android:onClick="onManagementCLick"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="409dp"

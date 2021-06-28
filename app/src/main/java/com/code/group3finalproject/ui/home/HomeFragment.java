@@ -5,18 +5,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.code.group3finalproject.R;
-import com.code.group3finalproject.RSSClasses.RSSNewsObject;
+import com.code.group3finalproject.RSSClasses.RSSManagedClasses;
+import com.code.group3finalproject.RSSFeedManager;
 import com.code.group3finalproject.RSSFeedRecyclerViewAdapter;
 import com.code.group3finalproject.databinding.FragmentHomeBinding;
 import com.code.group3finalproject.fetchRSSFeeds;
@@ -30,6 +28,8 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
     private FragmentHomeBinding binding;
     private RSSFeedRecyclerViewAdapter RSSRecycleFeed;
 
+
+    
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -38,7 +38,8 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
+        //Initialize the feed manager class
+        RSSManagedClasses feedManager = new RSSManagedClasses();
         // set up the RecyclerView
         RecyclerView recyclerView = root.findViewById(R.id.recycleFeed);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -46,7 +47,7 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
         RSSRecycleFeed.setClickListener(this);
         recyclerView.setAdapter(RSSRecycleFeed);
 
-        new fetchRSSFeeds(RSSRecycleFeed).execute((Void) null);
+        new fetchRSSFeeds(RSSRecycleFeed, feedManager).execute((Void) null);
 
         return root;
     }
