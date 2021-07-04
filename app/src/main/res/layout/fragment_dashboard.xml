@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_input_add"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/add_stock_button"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="409dp"
