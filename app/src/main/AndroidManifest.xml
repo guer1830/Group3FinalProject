@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Group3FinalProject">
-        <activity android:name=".RSSFeedManager"></activity>
+        <activity android:name=".AddStockActivity"></activity>
         <activity android:name=".StockDetailActivity"></activity>
         <activity
             android:name=".MainActivity"
