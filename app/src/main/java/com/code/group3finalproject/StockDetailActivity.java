@@ -7,11 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -23,9 +23,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -34,33 +32,38 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-
-import yahoofinance.Stock;
-import yahoofinance.YahooFinance;
-import yahoofinance.histquotes.HistoricalQuote;
-import yahoofinance.histquotes.Interval;
 
 public class StockDetailActivity extends AppCompatActivity {
 
     enum STOCK_COMMAND {
-        INFO,
-        HISTORY
+        INTRADAY,
+        HISTORY,
+        QUOTES
     }
 
-    private List<Pair<Date, Double>> dailyClosePrices =new ArrayList<Pair<Date, Double>>();
-    final private String API_PRICE_JSON_KEY = "Time Series (Daily)";
+    private List<Pair<Date, Double>> historyPrices =new ArrayList<Pair<Date, Double>>();
+    private List<Pair<Date, Double>> intradayPrices =new ArrayList<Pair<Date, Double>>();
+
+    final private String API_HISTORY_JSON_KEY = "Time Series (Daily)";
+    final private String API_INTRADAY_JSON_KEY = "Time Series (5min)";
     final private String API_CLOSE_PRICE = "4. close";
+    private String stockSymbol = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_detail);
+
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("StockSymbol")) {
+            stockSymbol = intent.getStringExtra("StockSymbol");
+            Log.d(getClass().getSimpleName(),stockSymbol);
+        }
 
         final GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setVisibility(View.VISIBLE);
@@ -69,72 +72,56 @@ public class StockDetailActivity extends AppCompatActivity {
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
 
-            String stockSymbol = "";
-            Intent intent = getIntent();
-
-            if (dailyClosePrices.isEmpty()) {
-                if (intent.hasExtra("StockSymbol")) {
-                    stockSymbol = intent.getStringExtra("StockSymbol");
-                    Log.d(getClass().getSimpleName(),stockSymbol);
-                }
-                String finalStockSymbol = stockSymbol;
-                dailyClosePrices = getStockHistories(finalStockSymbol);
-            }
-
-            // checkedId is the RadioButton selected
             RadioButton rb=(RadioButton)findViewById(checkedId);
             String range = (String) rb.getText();
-            Integer offsets = 1;
+
+            Calendar date = getCurrentDate();
+
+            // checkedId is the RadioButton selected
             if (range.equals("1D")) {
-                //TODO daily is not working yet
-                offsets = 1;
-            } else if (range.equals("1W")) {
-                offsets = 7;
+                // TODO: figure out how to get real time quotes without having to spend money
+                date.add(Calendar.DAY_OF_YEAR, -1);
+            }else if (range.equals("1W")) {
+                date.add(Calendar.DAY_OF_YEAR, -7);
             } else if (range.equals("1M")) {
-                offsets = 30;
+                date.add(Calendar.MONTH, -1);
             } else if (range.equals("3M")) {
-                offsets = 90;
+                date.add(Calendar.MONTH, -3);
             } else if (range.equals("1Y")) {
-                offsets = 365;
+                date.add(Calendar.YEAR, -1);
             } else if (range.equals("All")) {
-                offsets = dailyClosePrices.size();
-            }
-            offsets = Math.min(offsets, dailyClosePrices.size());
-
-            ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
-
-            double maxPrice = 0;
-            double minPrice = Double.MAX_VALUE;
-            Date maxDate = dailyClosePrices.get(dailyClosePrices.size()-1).first;
-            Date minDate = dailyClosePrices.get(dailyClosePrices.size()-offsets).first;;
-
-            for (int i = dailyClosePrices.size() - offsets; i < dailyClosePrices.size(); i++) {
-                Pair<Date, Double> datePrice = dailyClosePrices.get(i);
-                dps.add(new DataPoint(datePrice.first, datePrice.second));
-                maxPrice = Math.max(datePrice.second, maxPrice);
-                minPrice = Math.min(datePrice.second, minPrice);
+                date.add(Calendar.YEAR, -100);
             }
 
-            //TODO the graph need to be seriously tuned.
-            LineGraphSeries <DataPoint> series = new LineGraphSeries<DataPoint>(dps.toArray(new DataPoint[0]));
-            graph.addSeries(series);
-            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StockDetailActivity.this));
-            graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+            Date startDate = date.getTime();
 
-            graph.getViewport().setMinX(minDate.getTime());
-            graph.getViewport().setMaxX(maxDate.getTime()+1);
-            graph.getViewport().setMaxY(maxPrice*1.1);
-            graph.getViewport().setMinY(Math.max(0, minPrice/1.1));
-            graph.getViewport().setXAxisBoundsManual(true);
-            graph.getGridLabelRenderer().setNumHorizontalLabels(10);
+            if (range.equals("1D") ) {
+                if (intradayPrices.isEmpty()) {
+                    intradayPrices = getStockIntraday();
+                }
+                generateGraph(graph, startDate, intradayPrices);
+                return;
+            }else if (historyPrices.isEmpty()) {
+                historyPrices = getStockHistories();
+            }
+            generateGraph(graph, startDate, historyPrices);
         });
 
-        radioGroup.check(R.id.time_range_week);
+        intradayPrices = getStockIntraday();
+        Calendar date = getCurrentDate();
+        date.add(Calendar.DAY_OF_YEAR, -1);
+        Date startDate = date.getTime();
+        generateGraph(graph, startDate, intradayPrices);
+        populateQuotes();
+
+        TextView stockSymbolTextView = (TextView) findViewById(R.id.stock_symbol);
+        stockSymbolTextView.setText(stockSymbol);
+        stockSymbolTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
     }
 
-    protected List<Pair<Date, Double>> getStockHistories(String symbol) {
+    protected List<Pair<Date, Double>> getStockHistories() {
         try {
-            List<Pair<Date, Double>> histories = (List<Pair<Date, Double>>) new StockAPITask(symbol, STOCK_COMMAND.HISTORY).execute().get();
+            List<Pair<Date, Double>> histories = (List<Pair<Date, Double>>) new StockAPITask(stockSymbol, STOCK_COMMAND.HISTORY).execute().get();
             return histories;
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -145,15 +132,121 @@ public class StockDetailActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
-    protected Stock getStockInfo(String symbol) {
-        Stock stock = null;
+    protected List<Pair<Date, Double>> getStockIntraday() {
         try {
-            stock = (Stock) new StockAPITask(symbol, STOCK_COMMAND.INFO).execute().get();
-        }catch (InterruptedException | ExecutionException e) {
+            List<Pair<Date, Double>> intraday = (List<Pair<Date, Double>>) new StockAPITask(stockSymbol, STOCK_COMMAND.INTRADAY).execute().get();
+            return intraday;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        return stock;
+        return new ArrayList<>();
+    }
+
+    private Calendar getCurrentDate() {
+        Calendar date = new GregorianCalendar();
+        // reset hour, minutes, seconds and millis
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return date;
+    }
+
+    private void populateQuotes() {
+        try {
+            JSONObject quotes = (JSONObject) new StockQuotesAPI(stockSymbol).execute().get();
+            TextView open_text = (TextView) findViewById(R.id.stock_open);
+            TextView close_text = (TextView) findViewById(R.id.stock_close);
+            TextView low_text = (TextView) findViewById(R.id.stock_low);
+            TextView high_text = (TextView) findViewById(R.id.stock_high);
+
+            open_text.setText("open: " + quotes.get("02. open"));
+            close_text.setText("previous close: " + quotes.get("08. previous close"));
+            low_text.setText("low: " + quotes.get("04. low"));
+            high_text.setText("high: " + quotes.get("03. high"));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices) {
+        ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
+
+        double maxPrice = 0;
+        double minPrice = Double.MAX_VALUE;
+        Date maxDate = stockPrices.get(stockPrices.size()-1).first;
+        Date minDate = stockPrices.get(stockPrices.size()-1).first;
+
+        for (Pair<Date, Double> datePrice : stockPrices) {
+            if (datePrice.first.compareTo(startDate) >= 0) {
+                if (dps.isEmpty()) {
+                    minDate = datePrice.first;
+                }
+                dps.add(new DataPoint(datePrice.first, datePrice.second));
+                maxPrice = Math.max(datePrice.second, maxPrice);
+                minPrice = Math.min(datePrice.second, minPrice);
+            }
+        }
+
+        //TODO the graph need to be seriously tuned.
+        LineGraphSeries <DataPoint> series = new LineGraphSeries<DataPoint>(dps.toArray(new DataPoint[0]));
+        graph.addSeries(series);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StockDetailActivity.this));
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+
+        graph.getViewport().setMinX(minDate.getTime());
+        graph.getViewport().setMaxX(maxDate.getTime()+1);
+        graph.getViewport().setMaxY(maxPrice*1.1);
+        graph.getViewport().setMinY(Math.max(0, minPrice/1.1));
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(10);
+    }
+
+    private class StockQuotesAPI extends AsyncTask<Void, Void, JSONObject> {
+        String symbol;
+
+        StockQuotesAPI(String symbol) {
+            // list all the parameters like in normal class define
+            this.symbol = symbol;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            String api = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + this.symbol + "&apikey=BB7UNOS363WF0ETZ";
+
+            try {
+                URL stockApi = new URL(api);
+                URLConnection urlConn = stockApi.openConnection();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(line);
+                }
+
+                return (JSONObject) new JSONObject(stringBuffer.toString()).get("Global Quote");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 
     private class StockAPITask extends AsyncTask<Void, Void, Object> {
@@ -174,45 +267,54 @@ public class StockDetailActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Void... params) {
             List<Pair<Date, Double>> datePrices =new ArrayList<Pair<Date, Double>>();
-
-            //https://github.com/sfuhrm/yahoofinance-api
+            String api = "";
+            String pattern = "";
+            String jsonKey = "";
+                    //https://github.com/sfuhrm/yahoofinance-api
             switch (this.command) {
-                case INFO:
-                    return null;
+                case INTRADAY:
+                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + this.symbol + "&interval=5min&apikey=BB7UNOS363WF0ETZ";
+                    pattern = "yyyy-MM-dd HH:mm:ss";
+                    jsonKey = API_INTRADAY_JSON_KEY;
+                    break;
                 case HISTORY:
-                    final String AlphaAdvantageAPI = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + this.symbol + "&outputsize=full&apikey=BB7UNOS363WF0ETZ";
-
-                    try {
-                        URL stockApi = new URL(AlphaAdvantageAPI);
-                        URLConnection urlConn = stockApi.openConnection();
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
-
-                        StringBuffer stringBuffer = new StringBuffer();
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null)
-                        {
-                            stringBuffer.append(line);
-                        }
-
-                        JSONObject history = new JSONObject(stringBuffer.toString());
-                        JSONObject prices = (JSONObject)history.get(API_PRICE_JSON_KEY);
-                        for(Iterator iterator = prices.keys(); iterator.hasNext();) {
-                            String key = (String) iterator.next();
-                            Date date=new SimpleDateFormat("yyyy-MM-dd").parse(key);
-                            datePrices.add(0, new Pair(date, Double.parseDouble( ((String) ((JSONObject)prices.get(key)).get(API_CLOSE_PRICE)))));
-                        }
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + this.symbol + "&outputsize=full&apikey=BB7UNOS363WF0ETZ";
+                    pattern = "yyyy-MM-dd";
+                    jsonKey = API_HISTORY_JSON_KEY;
+                    break;
                 default:
             }
+
+            try {
+                URL stockApi = new URL(api);
+                URLConnection urlConn = stockApi.openConnection();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line;
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    stringBuffer.append(line);
+                }
+
+                JSONObject history = new JSONObject(stringBuffer.toString());
+                JSONObject prices = (JSONObject)history.get(jsonKey);
+                for(Iterator iterator = prices.keys(); iterator.hasNext();) {
+                    String key = (String) iterator.next();
+                    Date date=new SimpleDateFormat(pattern).parse(key);
+                    datePrices.add(0, new Pair(date, Double.parseDouble( ((String) ((JSONObject)prices.get(key)).get(API_CLOSE_PRICE)))));
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             return datePrices;
         }
     }
