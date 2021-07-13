@@ -52,6 +52,11 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapte
         return stocks.size();
     }
 
+    public void refreshData(List<Stock> stocks) {
+        this.stocks = stocks;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView stockSymbol;
 

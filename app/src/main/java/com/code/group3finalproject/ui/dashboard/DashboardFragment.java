@@ -7,29 +7,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.code.group3finalproject.AddStockActivity;
-import com.code.group3finalproject.R;
-import com.code.group3finalproject.RSSFeedRecyclerViewAdapter;
 import com.code.group3finalproject.StockRecycleAdapter;
 import com.code.group3finalproject.databinding.FragmentDashboardBinding;
 import com.code.group3finalproject.db.StockDatabase;
-import com.code.group3finalproject.db.dao.StockDAO;
 import com.code.group3finalproject.db.model.Stock;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
@@ -58,7 +50,6 @@ public class DashboardFragment extends Fragment {
         final RecyclerView recyclerView = binding.stockList;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         StockRecycleAdapter = new StockRecycleAdapter(stockList);
-        //StockRecycleAdapter.setClickListener(this);
         recyclerView.setAdapter(StockRecycleAdapter);
 
         ImageButton addStock = binding.imgAddButton;
@@ -68,6 +59,15 @@ public class DashboardFragment extends Fragment {
                 Log.d("Dashboard Fragment", "Add Stock button clicked");
                 Intent intent = new Intent(view.getContext(), AddStockActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        final SwipeRefreshLayout refreshLayout = binding.stockListSwipeContainer;
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                StockRecycleAdapter.refreshData(db.getStockDAO().getAll());
+                refreshLayout.setRefreshing(false);
             }
         });
 
