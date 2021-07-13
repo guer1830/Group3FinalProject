@@ -1,5 +1,7 @@
 package com.code.group3finalproject;
 
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,7 +38,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
+
     public void onManagementCLick(View view){
         Log.d("management","clicked");
+        Intent intent = new Intent(this, RSSFeedManager.class);
+        startActivity(intent);
     }
+
 }

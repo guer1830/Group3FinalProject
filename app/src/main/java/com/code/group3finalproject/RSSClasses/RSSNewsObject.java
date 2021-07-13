@@ -1,11 +1,17 @@
 package com.code.group3finalproject.RSSClasses;
 
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
+
 //This is my base RSS object class
 //The idea is that each feed will have a unique XML structure and this class will
 //Allow the XML Pull Parser to parse different tags that are specific to the indivdual
 //RSS feeds.
-public class RSSNewsObject {
+public class RSSNewsObject implements Parcelable {
 
     private String newsTitle;
     private String newsDescription;
@@ -20,6 +26,26 @@ public class RSSNewsObject {
         imageURL = "";
         publicationDate = "";
     }
+
+    protected RSSNewsObject(Parcel in) {
+        newsTitle = in.readString();
+        newsDescription = in.readString();
+        articleURL = in.readString();
+        imageURL = in.readString();
+        publicationDate = in.readString();
+    }
+
+    public static final Creator<RSSNewsObject> CREATOR = new Creator<RSSNewsObject>() {
+        @Override
+        public RSSNewsObject createFromParcel(Parcel in) {
+            return new RSSNewsObject(in);
+        }
+
+        @Override
+        public RSSNewsObject[] newArray(int size) {
+            return new RSSNewsObject[size];
+        }
+    };
 
     //Set the variables
     public void setNewsTitle(String input){
@@ -105,4 +131,17 @@ public class RSSNewsObject {
         return "pubDate";
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(newsTitle);
+        dest.writeString(newsDescription);
+        dest.writeString(articleURL);
+        dest.writeString(imageURL);
+        dest.writeString(publicationDate);
+    }
 }

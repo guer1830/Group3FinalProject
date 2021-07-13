@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Group3FinalProject</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">News</string>
+    <string name="title_dashboard">Stocks</string>
+    <string name="title_notifications">TODO</string>
     <string name="myContentString">TODO</string>
     <string name="RSSFeedManagementText">Manage RSS Feeds</string>
     <string name="stock_symbol">Stock Symbol</string>
