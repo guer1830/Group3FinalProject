@@ -3,6 +3,7 @@ package com.code.group3finalproject;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -55,6 +56,15 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapte
     public void refreshData(List<Stock> stocks) {
         this.stocks = stocks;
         notifyDataSetChanged();
+    }
+
+    public void deleteStock(int position) {
+        this.stocks.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public Stock getItem(int position) {
+        return this.stocks.get(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

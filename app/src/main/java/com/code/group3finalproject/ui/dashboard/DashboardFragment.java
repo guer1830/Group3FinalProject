@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -22,13 +23,15 @@ import com.code.group3finalproject.databinding.FragmentDashboardBinding;
 import com.code.group3finalproject.db.StockDatabase;
 import com.code.group3finalproject.db.model.Stock;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
-    private com.code.group3finalproject.StockRecycleAdapter StockRecycleAdapter;
+    private StockRecycleAdapter StockRecycleAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +65,33 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (direction == ItemTouchHelper.START) {
+                    int position = viewHolder.getAdapterPosition();
+                    Log.i("Stock Dashboard", "position to delete:" + position);
+                    db.getStockDAO().delete(StockRecycleAdapter.getItem(position));
+                    StockRecycleAdapter.deleteStock(position);
+                }
+            }
+
+            @Override
+            public int getMovementFlags(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = 0;
+                int swipeFlag = ItemTouchHelper.START;
+                return makeMovementFlags(dragFlags,swipeFlag);
+            }
+        };
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(swipeCallback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
         final SwipeRefreshLayout refreshLayout = binding.stockListSwipeContainer;
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -73,6 +103,7 @@ public class DashboardFragment extends Fragment {
 
         return root;
     }
+
 
     private void createInitialData(Context context) {
         StockDatabase db = StockDatabase.getInstance(context);
