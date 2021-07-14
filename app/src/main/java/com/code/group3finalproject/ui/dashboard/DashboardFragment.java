@@ -1,19 +1,18 @@
 package com.code.group3finalproject.ui.dashboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.code.group3finalproject.AddStockActivity;
+import com.code.group3finalproject.R;
 import com.code.group3finalproject.StockRecycleAdapter;
 import com.code.group3finalproject.databinding.FragmentDashboardBinding;
 import com.code.group3finalproject.db.StockDatabase;
@@ -117,9 +117,33 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        setHasOptionsMenu(true);
+
         return root;
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
+        Log.i("Stock List", "Creating Menu");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.stock_search_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.stock_bar_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("Stock Search", "text: " + newText);
+                StockRecycleAdapter.filter(newText);
+                return false;
+            }
+        });
+    }
 
     private void createInitialData(Context context) {
         StockDatabase db = StockDatabase.getInstance(context);

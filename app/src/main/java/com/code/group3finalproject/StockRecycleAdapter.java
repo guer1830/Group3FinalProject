@@ -16,6 +16,7 @@ import com.code.group3finalproject.db.model.Stock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapter.ViewHolder> {
@@ -60,6 +61,13 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapte
 
     public void deleteStock(int position) {
         this.stocks.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void filter(String filter) {
+        Log.i("Stock Adapter","items in list before filter: " + this.stocks.size());
+        this.stocks = this.stocks.stream().filter(s -> s.getSymbol().startsWith(filter)).collect(Collectors.toList());
+        Log.i("Stock Adapter","items in list after filter: " + this.stocks.size());
         notifyDataSetChanged();
     }
 
