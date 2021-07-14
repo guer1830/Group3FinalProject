@@ -1,7 +1,9 @@
 package com.code.group3finalproject.ui.dashboard;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -32,6 +38,16 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private StockRecycleAdapter StockRecycleAdapter;
+    StockDatabase db;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Stock Dashboard", "requestCode: " + requestCode + "resultCode: " + resultCode);
+        if (requestCode == 10) {
+            StockRecycleAdapter.refreshData(db.getStockDAO().getAll());
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +57,7 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        StockDatabase db = StockDatabase.getInstance(root.getContext());
+        db = StockDatabase.getInstance(root.getContext());
 
         List<Stock> stockList = db.getStockDAO().getAll();
 
@@ -61,7 +77,7 @@ public class DashboardFragment extends Fragment {
             public void onClick(View view) {
                 Log.d("Dashboard Fragment", "Add Stock button clicked");
                 Intent intent = new Intent(view.getContext(), AddStockActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 10);
             }
         });
 
