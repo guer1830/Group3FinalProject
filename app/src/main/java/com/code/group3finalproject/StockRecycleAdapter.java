@@ -64,9 +64,9 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapte
         notifyDataSetChanged();
     }
 
-    public void filter(String filter) {
+    public void filter(List<Stock> stocks, String filter) {
         Log.i("Stock Adapter","items in list before filter: " + this.stocks.size());
-        this.stocks = this.stocks.stream().filter(s -> s.getSymbol().startsWith(filter)).collect(Collectors.toList());
+        this.stocks = stocks.stream().filter(s -> s.getSymbol().startsWith(filter)).collect(Collectors.toList());
         Log.i("Stock Adapter","items in list after filter: " + this.stocks.size());
         notifyDataSetChanged();
     }

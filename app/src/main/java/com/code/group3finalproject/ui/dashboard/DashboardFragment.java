@@ -3,6 +3,7 @@ package com.code.group3finalproject.ui.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,16 +72,6 @@ public class DashboardFragment extends Fragment {
         StockRecycleAdapter = new StockRecycleAdapter(stockList);
         recyclerView.setAdapter(StockRecycleAdapter);
 
-        ImageButton addStock = binding.imgAddButton;
-        addStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("Dashboard Fragment", "Add Stock button clicked");
-                Intent intent = new Intent(view.getContext(), AddStockActivity.class);
-                startActivityForResult(intent, 10);
-            }
-        });
-
         ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
@@ -130,6 +121,7 @@ public class DashboardFragment extends Fragment {
 
         MenuItem searchItem = menu.findItem(R.id.stock_bar_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -139,8 +131,19 @@ public class DashboardFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("Stock Search", "text: " + newText);
-                StockRecycleAdapter.filter(newText);
-                return false;
+                StockRecycleAdapter.filter(db.getStockDAO().getAll(), newText);
+                return true;
+            }
+        });
+
+        MenuItem addStock = menu.findItem(R.id.addStock);
+        addStock.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Log.d("Dashboard Fragment", "Add Stock button clicked");
+                Intent intent = new Intent(getContext(), AddStockActivity.class);
+                startActivityForResult(intent, 10);
+                return true;
             }
         });
     }

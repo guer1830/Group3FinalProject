@@ -7,7 +7,13 @@
     <item
         android:id="@+id/stock_bar_search"
         android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search"
+        android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
+        android:inputType="textCapCharacters"
         app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/addStock"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/add_stock_button"
+        app:showAsAction="always" />
 </menu>
