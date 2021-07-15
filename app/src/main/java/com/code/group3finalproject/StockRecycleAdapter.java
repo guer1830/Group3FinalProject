@@ -61,7 +61,8 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockRecycleAdapte
 
     public void deleteStock(int position) {
         this.stocks.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
     }
 
     public void filter(List<Stock> stocks, String filter) {

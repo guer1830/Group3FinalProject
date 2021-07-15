@@ -2,6 +2,13 @@ package com.code.group3finalproject.ui.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -16,6 +23,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -39,7 +47,7 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private StockRecycleAdapter StockRecycleAdapter;
-    StockDatabase db;
+    private StockDatabase db;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
@@ -93,6 +101,46 @@ public class DashboardFragment extends Fragment {
                 int dragFlags = 0;
                 int swipeFlag = ItemTouchHelper.START;
                 return makeMovementFlags(dragFlags,swipeFlag);
+            }
+
+            @Override
+            public void onChildDraw(@NonNull @NotNull Canvas c, @NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                View itemView = viewHolder.itemView;
+                int itemHeight = itemView.getHeight();
+
+                boolean isCancelled = dX == 0 && !isCurrentlyActive;
+
+                if (isCancelled) {
+                    Paint mClearIcon = new Paint();
+                    mClearIcon.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                    c.drawRect(itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom(), mClearIcon);
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                    return;
+                }
+
+                ColorDrawable mBackground = new ColorDrawable(Color.RED);
+                mBackground.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                mBackground.draw(c);
+
+                Drawable deleteDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_delete_24);
+                int intrinsicWidth = deleteDrawable.getIntrinsicWidth();
+                int intrinsicHeight = deleteDrawable.getIntrinsicHeight();
+                int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
+                int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+                int deleteIconRight = itemView.getRight() - deleteIconMargin;
+                int deleteIconBottom = deleteIconTop + intrinsicHeight;
+
+
+                deleteDrawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
+                deleteDrawable.draw(c);
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+
+            @Override
+            public float getSwipeThreshold(@NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+                return 0.8f;
             }
         };
 
