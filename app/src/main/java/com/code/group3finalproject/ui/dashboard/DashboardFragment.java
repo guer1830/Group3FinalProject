@@ -131,7 +131,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("Stock Search", "text: " + newText);
-                StockRecycleAdapter.filter(db.getStockDAO().getAll(), newText);
+                StockRecycleAdapter.filter(db.getStockDAO().getAll(), newText.toUpperCase());
                 return true;
             }
         });
