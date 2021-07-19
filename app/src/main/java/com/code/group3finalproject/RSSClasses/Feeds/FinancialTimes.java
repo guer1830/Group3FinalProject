@@ -6,17 +6,16 @@ import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 
 import java.io.Serializable;
 
-public class CNNWealth extends RSSNewsFeed implements Serializable {
-    // "https://www.cnbc.com/id/10001054/device/rss/rss.html"
+public class FinancialTimes extends RSSNewsFeed implements Serializable {
 
     private String RSSFeedURL;
     private Boolean includeFeed;
     private String name;
 
-    public CNNWealth(){
+    public FinancialTimes(){
         super();
-        this.RSSFeedURL = "https://www.cnbc.com/id/10001054/device/rss/rss.html";
-        this.name = "CNN Wealth";
+        this.RSSFeedURL = "https://www.ft.com/?format=rss";
+        this.name = "Financial Times";
         this.includeFeed = Boolean.TRUE;
     }
 
@@ -54,5 +53,6 @@ public class CNNWealth extends RSSNewsFeed implements Serializable {
     public String getTitleTag() {
         return "title";
     }
+
 
 }

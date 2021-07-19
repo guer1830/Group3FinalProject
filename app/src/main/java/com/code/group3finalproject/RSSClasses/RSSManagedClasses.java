@@ -2,14 +2,18 @@ package com.code.group3finalproject.RSSClasses;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.code.group3finalproject.RSSClasses.Feeds.CNNBusiness;
 import com.code.group3finalproject.RSSClasses.Feeds.CNNFinance;
 import com.code.group3finalproject.RSSClasses.Feeds.CNNWealth;
+import com.code.group3finalproject.RSSClasses.Feeds.FinancialTimes;
+import com.code.group3finalproject.RSSClasses.Feeds.Fortune;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RSSManagedClasses implements Parcelable {
+public class RSSManagedClasses implements Serializable {
     ArrayList<RSSNewsFeed> possibleFeeds;
 
     public RSSManagedClasses(){
@@ -19,33 +23,9 @@ public class RSSManagedClasses implements Parcelable {
         this.possibleFeeds.add(new CNNBusiness());
         this.possibleFeeds.add(new CNNFinance());
         this.possibleFeeds.add(new CNNWealth());
+        this.possibleFeeds.add(new FinancialTimes());
+        this.possibleFeeds.add(new Fortune());
 
-    }
-
-    protected RSSManagedClasses(Parcel in) {
-        this.possibleFeeds = in.readArrayList(null);
-    }
-
-    public static final Creator<RSSManagedClasses> CREATOR = new Creator<RSSManagedClasses>() {
-        @Override
-        public RSSManagedClasses createFromParcel(Parcel in) {
-            return new RSSManagedClasses(in);
-        }
-
-        @Override
-        public RSSManagedClasses[] newArray(int size) {
-            return new RSSManagedClasses[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.possibleFeeds);
     }
 
 
@@ -57,6 +37,18 @@ public class RSSManagedClasses implements Parcelable {
             }
         }
         return filteredFeeds;
+    }
+
+    public ArrayList<RSSNewsFeed> getAllFeeds(){
+        return this.possibleFeeds;
+    }
+
+    public void printFeedNames(){
+        for (RSSNewsFeed i : possibleFeeds) {
+            Log.d("RSSManaged", i.getRSSFeedName());
+            Log.d("RSSManaged", i.getRSSFeedURL());
+            Log.d("RSSManaged", i.getIncludeFeed()?"T":"F");
+        }
     }
 
 }

@@ -4,22 +4,53 @@ import android.os.Parcel;
 
 import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 
-public class CNNBusiness extends RSSNewsFeed {
+import java.io.Serializable;
+
+public class CNNBusiness extends RSSNewsFeed implements Serializable {
 
     private String RSSFeedURL;
-    private String includeFeed;
+    private Boolean includeFeed;
+    private String name;
 
     public CNNBusiness(){
         super();
         this.RSSFeedURL = "https://www.cnbc.com/id/10001147/device/rss/rss.html";
+        this.name = "CNN Business";
+        this.includeFeed = Boolean.TRUE;
     }
 
-    protected CNNBusiness(Parcel in) {
-        super(in);
-    }
 
     public String getRSSFeedURL(){
         return this.RSSFeedURL;
     }
 
+    public String getRSSFeedName(){
+        return this.name;
+    }
+
+    public Boolean getIncludeFeed() {return this.includeFeed;}
+
+    public String getItemTag() {
+        return "item";
+    }
+
+    public String getDescriptionTag() {
+        return "description";
+    }
+
+    public String getHyperLinkTag() {
+        return "link";
+    }
+
+    public String getPublicationDateTag() {
+        return "pubDate";
+    }
+
+    public String getImageLinkTag() {
+        return "";
+    }
+
+    public String getTitleTag() {
+        return "title";
+    }
 }
