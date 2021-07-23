@@ -209,6 +209,11 @@ public class StockDetailActivity extends AppCompatActivity {
         graph.getGridLabelRenderer().setNumHorizontalLabels(10);
     }
 
+    public void returnToMainView(View view){
+        Log.d("StockDetailView","returning to main");
+        finish();
+    }
+
     private class StockQuotesAPI extends AsyncTask<Void, Void, JSONObject> {
         String symbol;
 
