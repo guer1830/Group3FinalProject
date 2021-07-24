@@ -1,5 +1,6 @@
 package com.code.group3finalproject.ui.home;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,12 @@ import com.code.group3finalproject.databinding.FragmentHomeBinding;
 import com.code.group3finalproject.fetchRSSFeeds;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapter.OnItemClickListener {
@@ -27,7 +34,7 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private RSSFeedRecyclerViewAdapter RSSRecycleFeed;
-
+    private RSSManagedClasses feedManager = null;
 
     
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,8 +45,36 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //Initialize the feed manager class
-        RSSManagedClasses feedManager = new RSSManagedClasses();
+
+        //Load the saved preferences for the feed manager
+        try {
+            Log.d("IO", "Loading File");
+            FileInputStream fis = getContext().openFileInput("RSS.dat");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            feedManager = (RSSManagedClasses) is.readObject();
+            is.close();
+            fis.close();
+            Log.d("IO", "Loaded File");
+
+            if(feedManager == null){
+                feedManager = new RSSManagedClasses();
+            }
+        } catch (FileNotFoundException e) {
+            Log.d("IO", e.toString());
+            e.printStackTrace();
+            feedManager = new RSSManagedClasses();
+        } catch (IOException e) {
+            e.printStackTrace();
+            feedManager = new RSSManagedClasses();
+            Log.d("IO", e.toString());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            feedManager = new RSSManagedClasses();
+            Log.d("IO", e.toString());
+        }
+
+        feedManager.printFeedNames();
+
         // set up the RecyclerView
         RecyclerView recyclerView = root.findViewById(R.id.recycleFeed);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -47,6 +82,7 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
         RSSRecycleFeed.setClickListener(this);
         recyclerView.setAdapter(RSSRecycleFeed);
 
+        Log.d("IO", "Running Background tasks");
         new fetchRSSFeeds(RSSRecycleFeed, feedManager).execute((Void) null);
 
         return root;
@@ -64,5 +100,21 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
     }
 
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        FileOutputStream fos = null;
+        try {
+            fos = getContext().openFileOutput("RSS.dat", Activity.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(feedManager);
+            os.close();
+            fos.close();
+            Log.d("Saving", "Saved to output file");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

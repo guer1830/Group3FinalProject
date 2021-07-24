@@ -1,3 +1,4 @@
+
 package com.code.group3finalproject.RSSClasses.Feeds;
 
 import android.os.Parcel;
@@ -6,17 +7,16 @@ import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 
 import java.io.Serializable;
 
-public class CNNWealth extends RSSNewsFeed implements Serializable {
-    // "https://www.cnbc.com/id/10001054/device/rss/rss.html"
+public class Fortune extends RSSNewsFeed implements Serializable {
 
     private String RSSFeedURL;
     private Boolean includeFeed;
     private String name;
 
-    public CNNWealth(){
+    public Fortune(){
         super();
-        this.RSSFeedURL = "https://www.cnbc.com/id/10001054/device/rss/rss.html";
-        this.name = "CNN Wealth";
+        this.RSSFeedURL = "https://fortune.com/feed";
+        this.name = "Fortune";
         this.includeFeed = Boolean.TRUE;
     }
 
@@ -54,5 +54,4 @@ public class CNNWealth extends RSSNewsFeed implements Serializable {
     public String getTitleTag() {
         return "title";
     }
-
 }

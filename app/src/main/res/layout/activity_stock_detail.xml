@@ -20,7 +20,16 @@
                 android:id="@+id/stock_symbol"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_weight="2"
                 android:text="open" />
+            <Button
+                android:id="@+id/stock_detail_go_back"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:textSize="10sp"
+                android:text="back"
+                android:onClick="returnToMainView"/>
         </LinearLayout>
 
         <LinearLayout
@@ -48,42 +57,42 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="1D" />
+                    android:text="@string/time_range_one_day" />
 
                 <RadioButton
                     android:id="@+id/time_range_week"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="1W" />
+                    android:text="@string/time_range_one_week" />
 
                 <RadioButton
                     android:id="@+id/time_range_month"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="1M" />
+                    android:text="@string/time_range_one_month" />
 
                 <RadioButton
                     android:id="@+id/time_range_3month"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="3M" />
+                    android:text="@string/time_range_three_month" />
 
                 <RadioButton
                     android:id="@+id/time_range_year"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="1Y" />
+                    android:text="@string/time_range_one_year" />
 
                 <RadioButton
                     android:id="@+id/time_range_all"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="All" />
+                    android:text="@string/time_range_all" />
             </RadioGroup>
         </LinearLayout>
 
@@ -102,7 +111,7 @@
                 app:layout_columnWeight="1"
                 app:layout_row="0"
                 app:layout_rowWeight="1"
-                android:text="open" />
+                android:text="@string/quotes_open" />
 
             <TextView
                 android:id="@+id/stock_close"
@@ -112,7 +121,7 @@
                 app:layout_columnWeight="1"
                 app:layout_row="1"
                 app:layout_rowWeight="1"
-                android:text="previous close" />
+                android:text="@string/quotes_close" />
 
 
             <TextView
@@ -123,7 +132,7 @@
                 app:layout_columnWeight="1"
                 app:layout_row="0"
                 app:layout_rowWeight="1"
-                android:text="high" />
+                android:text="@string/quotes_high" />
 
             <TextView
                 android:id="@+id/stock_low"
@@ -133,10 +142,7 @@
                 app:layout_columnWeight="1"
                 app:layout_row="1"
                 app:layout_rowWeight="1"
-                android:text="low" />
-
-
+                android:text="@string/quotes_low" />
         </androidx.gridlayout.widget.GridLayout>
-
     </LinearLayout>
 </RelativeLayout>

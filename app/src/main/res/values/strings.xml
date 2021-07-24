@@ -8,5 +8,15 @@
     <string name="stock_symbol">Stock Symbol</string>
     <string name="add_stock_button">Add Stock</string>
     <string name="search">Search</string>
+    <string name="time_range_one_day">1D</string>
+    <string name="time_range_one_week">1W</string>
+    <string name="time_range_one_month">1M</string>
+    <string name="time_range_three_month">3M</string>
+    <string name="time_range_one_year">1Y</string>
+    <string name="time_range_all">All</string>
+    <string name="quotes_open">Open</string>
+    <string name="quotes_close">Previous Close</string>
+    <string name="quotes_high">High</string>
+    <string name="quotes_low">Low</string>
     <string name="empty_not_saved">Stock field was empty, Not Saved</string>
 </resources>

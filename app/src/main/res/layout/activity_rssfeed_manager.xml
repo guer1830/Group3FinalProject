@@ -18,12 +18,12 @@
         tools:layout_editor_absoluteY="15dp"
         android:onClick="returnToRSSFeed"/>
 
-    <!--
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="409dp"
         android:layout_height="666dp"
         android:layout_below="@+id/manageRSSButton"
+        android:id="@+id/RSSManagerRecycler"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="64dp" />
-        -->
 </RelativeLayout>
