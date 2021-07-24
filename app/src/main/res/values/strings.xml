@@ -8,4 +8,5 @@
     <string name="stock_symbol">Stock Symbol</string>
     <string name="add_stock_button">Add Stock</string>
     <string name="search">Search</string>
+    <string name="empty_not_saved">Stock field was empty, Not Saved</string>
 </resources>
