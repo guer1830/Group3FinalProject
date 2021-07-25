@@ -19,4 +19,13 @@
     <string name="quotes_high">High</string>
     <string name="quotes_low">Low</string>
     <string name="empty_not_saved">Stock field was empty, Not Saved</string>
+    <string name="helpMenuText">Help</string>
+    <string name="authors_title">Authors</string>
+    <string name="version_title">Version Number</string>
+    <string name="instructions_title">Instructions</string>
+    <string name="help_dialog_title">Help</string>
+    <string name="button_ok_text">OK</string>
+    <string name="app_version">1.0</string>
+    <string name="app_instructions_description">TODO - Instructions</string>
+    <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
 </resources>

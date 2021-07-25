@@ -16,4 +16,9 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_stock_button"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/appHelp"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/helpMenuText"
+        app:showAsAction="never" />
 </menu>

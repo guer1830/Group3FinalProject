@@ -1,6 +1,7 @@
 package com.code.group3finalproject.ui.dashboard;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,11 +22,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -199,6 +202,30 @@ public class DashboardFragment extends Fragment {
                 Log.d("Dashboard Fragment", "Add Stock button clicked");
                 Intent intent = new Intent(getContext(), AddStockActivity.class);
                 startActivityForResult(intent, NEW_STOCK_ACTIVITY_REQUEST_CODE);
+                return true;
+            }
+        });
+
+        MenuItem helpMenu = menu.findItem(R.id.appHelp);
+        helpMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Log.d("Dashboard Fragment", "Help menu button clicked");
+                AlertDialog.Builder help_dialog_builder = new AlertDialog.Builder(getContext());
+                LayoutInflater help_dialog_inflater = getActivity().getLayoutInflater();
+                View content = help_dialog_inflater.inflate(R.layout.help_dialog,null);
+                help_dialog_builder.setView(content);
+                //EditText dialogText = (EditText) content.findViewById(R.id.dialog_snack_text);
+                //dialogText.setText(action_one_message);
+                help_dialog_builder.setTitle(R.string.help_dialog_title);
+                help_dialog_builder.setPositiveButton(R.string.button_ok_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog help_dialog = help_dialog_builder.create();
+                help_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                help_dialog.show();
                 return true;
             }
         });
