@@ -2,6 +2,10 @@ package com.code.group3finalproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.code.group3finalproject.RSSClasses.RSSNewsObject;
@@ -19,15 +24,18 @@ import com.code.group3finalproject.RSSClasses.RSSNewsObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecyclerViewAdapter.ViewHolder> {
     private ArrayList<RSSNewsObject>  recyclerData;
     private LayoutInflater RSSInflater;
     private OnItemClickListener RSSClickListener;
+    private Context currentContext;
 
     public RSSFeedRecyclerViewAdapter(Context context, ArrayList<RSSNewsObject> data){
         this.RSSInflater = LayoutInflater.from(context);
         this.recyclerData = data;
+        this.currentContext = context;
     }
 
     @NonNull
@@ -43,7 +51,10 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
         RSSNewsObject myObj = recyclerData.get(position);
         holder.TitleTextView.setText(myObj.getNewsTitle());
         holder.descriptionTextView.setText(myObj.getNewsDescription());
+
+        //If the news item has no image use a random placeholder image
         //holder.RecyclerImageView.setImageBitmap();
+        holder.RecyclerImageView.setImageBitmap(getRandomImage());
     }
 
     @Override
@@ -92,5 +103,26 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
 
     public interface  OnItemClickListener{
         void onItemClick(View view, int position);
+    }
+
+
+    public Bitmap getRandomImage(){
+        ArrayList<Object> images = new ArrayList<>(
+                Arrays.asList(R.drawable.big_city,
+                        R.drawable.cityscape,
+                        R.drawable.desk,
+                        R.drawable.graph_laptop,
+                        R.drawable.laptop,
+                        R.drawable.meeting,
+                        R.drawable.notepad,
+                        R.drawable.skyscraper,
+                        R.drawable.suit));
+
+        int index = (int)(Math.random() * images.size());
+
+
+        Bitmap b = BitmapFactory.decodeResource(this.currentContext.getResources(), (Integer) images.get(index));
+
+        return Bitmap.createScaledBitmap(b, 120, 120, false);
     }
 }

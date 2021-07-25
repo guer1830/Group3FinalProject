@@ -5,12 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.code.group3finalproject.RSSClasses.RSSManagedClasses;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,37 +57,39 @@ public class RSSFeedManager extends AppCompatActivity implements  RSSManagerRecy
             Log.d("IO", e.toString());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            feedManager = new RSSManagedClasses();
-            Log.d("IO", e.toString());
         }
 
-        feedManager.printFeedNames();
-        //Load the recycler view
-        //Initialize the feed manager class
-        //feedManager = new RSSManagedClasses();
-        // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.RSSManagerRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         RSSManagerRecycleFeed = new RSSManagerRecyclerViewAdapter(this, feedManager.getAllFeeds());
         RSSManagerRecycleFeed.setClickListener((RSSManagerRecyclerViewAdapter.OnItemClickListener) this);
         recyclerView.setAdapter(RSSManagerRecycleFeed);
+
+
+        CharSequence text = "Modify Feed Settings";
+        int duration = Snackbar.LENGTH_LONG;
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar mySnackbar = Snackbar.make(parentLayout, text, duration);
+        mySnackbar.show();
     }
+
 
     public void returnToRSSFeed(View view){
         Log.d("MessageTag","returning to main");
         Intent intent = new Intent(this,MainActivity.class);
+
+
         startActivity(intent);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        return;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        FileOutputStream fos = null;
+        FileOutputStream fos;
         try {
             fos = this.openFileOutput("RSS.dat", Activity.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -92,9 +97,7 @@ public class RSSFeedManager extends AppCompatActivity implements  RSSManagerRecy
             os.close();
             fos.close();
             Log.d("RSSFeedManager", "Saved File");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
     }

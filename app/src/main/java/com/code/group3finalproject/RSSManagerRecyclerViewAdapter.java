@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,10 +30,12 @@ public class RSSManagerRecyclerViewAdapter extends RecyclerView.Adapter<RSSManag
     private ArrayList<RSSNewsFeed> recyclerData;
     private LayoutInflater RSSInflater;
     private OnItemClickListener RSSClickListener;
+    private Context currentContext;
 
     public RSSManagerRecyclerViewAdapter(Context context, ArrayList<RSSNewsFeed> data){
         this.RSSInflater = LayoutInflater.from(context);
         this.recyclerData = data;
+        this.currentContext = context;
     }
 
 
@@ -50,12 +53,15 @@ public class RSSManagerRecyclerViewAdapter extends RecyclerView.Adapter<RSSManag
         holder.feedTitleTestView.setText(myObj.getRSSFeedName());
 
 
+
         if (myObj.isIncluded()){
             holder.inclusionButton.setBackgroundColor(Color.GREEN);
         }
         else{
             holder.inclusionButton.setBackgroundColor(Color.RED);
         }
+
+
     }
 
 

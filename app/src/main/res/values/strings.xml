@@ -5,6 +5,7 @@
     <string name="title_notifications">TODO</string>
     <string name="myContentString">TODO</string>
     <string name="RSSFeedManagementText">Manage RSS Feeds</string>
+    <string name="returnToRSSFeed">Return</string>
     <string name="stock_symbol">Stock Symbol</string>
     <string name="add_stock_button">Add Stock</string>
     <string name="search">Search</string>

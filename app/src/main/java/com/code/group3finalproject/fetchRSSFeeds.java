@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     private ArrayList<RSSNewsObject> recyclerObjects;
@@ -51,7 +52,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         }
 
         //Sort the feed based on the publication date
-
+        Collections.shuffle(recyclerObjects);
         return false;
     }
 
@@ -161,21 +162,21 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
 
 
     private Boolean checkIfObjectIsReady(RSSNewsObject object, String title, String description, String articleLink, String imageLink, String publicationDate){
-        Boolean isReady = true;
+        boolean isReady = true;
         if (object.isTitleRequired()){
-            isReady = (isReady & title != null);
+            isReady = (isReady && title != null);
         }
         if (object.isDescriptionRequired()){
-            isReady = (isReady & description != null);
+            isReady = (isReady && description != null);
         }
         if (object.isArticleLinkRequired()){
-            isReady = (isReady & articleLink != null);
+            isReady = (isReady && articleLink != null);
         }
         if (object.isImageRequired()){
-            isReady = (isReady & imageLink != null);
+            isReady = (isReady && imageLink != null);
         }
         if (object.isDateRequired()){
-            isReady = (isReady & publicationDate != null);
+            isReady = (isReady && publicationDate != null);
         }
 
         return isReady;
