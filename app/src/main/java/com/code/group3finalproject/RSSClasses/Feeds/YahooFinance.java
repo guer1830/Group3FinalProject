@@ -31,4 +31,28 @@ public class YahooFinance extends RSSNewsFeed implements Serializable {
 
     public Boolean getIncludeFeed() {return this.includeFeed;}
 
+    public String getItemTag() {
+        return "item";
+    }
+
+    public String getDescriptionTag() {
+        return "description";
+    }
+
+    public String getHyperLinkTag() {
+        return "link";
+    }
+
+    public String getPublicationDateTag() {
+        return "pubDate";
+    }
+
+    public String getImageLinkTag() {
+        return "";
+    }
+
+    public String getTitleTag() {
+        return "title";
+    }
+
 }

@@ -110,6 +110,7 @@ public class RSSNewsObject implements Parcelable {
         return true;
     }
 
+    /*
     //These functions return the assosciated tag string
     public String getTitleTag(){
         return "title";
@@ -130,6 +131,8 @@ public class RSSNewsObject implements Parcelable {
     public String getDateTag(){
         return "pubDate";
     }
+
+    */
 
     @Override
     public int describeContents() {

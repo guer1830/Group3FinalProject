@@ -43,6 +43,13 @@ public class RSSManagedClasses implements Serializable {
         return this.possibleFeeds;
     }
 
+    public void toggleInclusion(int index){
+        if (index >= this.possibleFeeds.size() || index < 0){
+            return;
+        }
+        this.possibleFeeds.get(index).toggleInclusion();
+    }
+
     public void printFeedNames(){
         for (RSSNewsFeed i : possibleFeeds) {
             Log.d("RSSManaged", i.getRSSFeedName());
