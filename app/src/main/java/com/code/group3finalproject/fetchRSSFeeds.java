@@ -1,8 +1,13 @@
 package com.code.group3finalproject;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.FileUtils;
 import android.util.Log;
 import android.util.Xml;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.code.group3finalproject.RSSClasses.RSSManagedClasses;
 import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
@@ -21,15 +26,18 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     private ArrayList<RSSNewsObject> recyclerObjects;
     private RSSFeedRecyclerViewAdapter recyclerAdapter;
     private RSSManagedClasses manager;
+    private ProgressDialog pDialog;
+    private ProgressBar pBar;
 
-    public fetchRSSFeeds(RSSFeedRecyclerViewAdapter adapter, RSSManagedClasses manager){
+    public fetchRSSFeeds(RSSFeedRecyclerViewAdapter adapter, RSSManagedClasses manager, ProgressBar pBar){
         this.recyclerAdapter = adapter;
         this.manager = manager;
+        this.pBar = pBar;
     }
 
     @Override
     protected void onPreExecute() {
-
+        pBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -53,13 +61,18 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
 
         //Sort the feed based on the publication date
         Collections.shuffle(recyclerObjects);
+
+
         return false;
     }
 
 
     @Override
     protected void onPostExecute(Boolean success) {
+        //Set the recylcer adapters data to the retrieved data
         this.recyclerAdapter.setData(this.recyclerObjects);
+        //Remove the progress symbol from the screen
+        pBar.setVisibility(View.INVISIBLE);
     }
 
     public ArrayList<RSSNewsObject> parseXMLFeed(InputStream inputStream, RSSNewsFeed RSSFeed) throws XmlPullParserException, IOException {
@@ -128,7 +141,16 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                     hyperLink = currentTagText;
                 }
                 else if (tagName.equalsIgnoreCase(descriptionTag)){
-                    description = currentTagText;
+
+                    String unProcessedText = currentTagText;
+
+                    if(unProcessedText.contains("<")){
+                        description = unProcessedText.substring(0,unProcessedText.indexOf("<"));
+                    }
+                    else{
+                        description = currentTagText;
+                    }
+
                 }
                 else if (tagName.equalsIgnoreCase(publicationDateTag)){
                     publicationDate = currentTagText;

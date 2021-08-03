@@ -29,4 +29,5 @@
     <string name="app_version">1.0</string>
     <string name="app_instructions_description">TODO - Instructions</string>
     <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
+    <string name="app_instructions">App Instructions</string>
 </resources>

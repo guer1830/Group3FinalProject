@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
     private FragmentHomeBinding binding;
     private RSSFeedRecyclerViewAdapter RSSRecycleFeed;
     private RSSManagedClasses feedManager = null;
+    private View root;
 
     
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,7 +44,7 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+         root = binding.getRoot();
 
 
         //Load the saved preferences for the feed manager
@@ -83,10 +84,11 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
         recyclerView.setAdapter(RSSRecycleFeed);
 
         Log.d("IO", "Running Background tasks");
-        new fetchRSSFeeds(RSSRecycleFeed, feedManager).execute((Void) null);
+        new fetchRSSFeeds(RSSRecycleFeed, feedManager, root.findViewById(R.id.loadingRSSFeed)).execute((Void) null);
 
         return root;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -117,4 +119,5 @@ public class HomeFragment extends Fragment implements  RSSFeedRecyclerViewAdapte
             e.printStackTrace();
         }
     }
+
 }
