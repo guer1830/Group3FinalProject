@@ -1,7 +1,7 @@
 package com.code.group3finalproject.ui.notifications;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.code.group3finalproject.R;
-import com.code.group3finalproject.RSSFeedRecyclerViewAdapter;
 import com.code.group3finalproject.databinding.FragmentNotificationsBinding;
-import com.code.group3finalproject.fetchRSSFeeds;
-import com.code.group3finalproject.guideObject;
-import com.code.group3finalproject.guideRecyclerViewAdapter;
+import com.code.group3finalproject.db.StockDatabase;
+import com.code.group3finalproject.db.model.Stock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;
     private FragmentNotificationsBinding binding;
-    private guideRecyclerViewAdapter guideRecycleFeed;
-    private ArrayList<guideObject> descData;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,20 +36,31 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        StockDatabase db = StockDatabase.getInstance(root.getContext());
+        List<Stock> stockList = new ArrayList<>();
+        NotificationRecycleAdapter notificationRecycleAdapter = new NotificationRecycleAdapter(stockList);
 
-        guideObject newsObject = new guideObject("News","Scroll", "example_gif");
-        //Add data for each section
-        descData = new ArrayList<guideObject>();
-        descData.add(newsObject);
+        db.getStockDAO().getAll().observe(getViewLifecycleOwner(), new Observer<List<Stock>>() {
+            @Override
+            public void onChanged(List<Stock> stocks) {
+                stockList.addAll(stocks);
+                notificationRecycleAdapter.notifyDataSetChanged();
+            }
+        });
 
 
-        // set up the RecyclerView
-        RecyclerView recyclerView = root.findViewById(R.id.guideFeed);
+        final RecyclerView recyclerView = binding.rvNotifs;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        guideRecycleFeed = new guideRecyclerViewAdapter(getActivity(), descData);
-        guideRecycleFeed.setClickListener(this);
-        recyclerView.setAdapter(guideRecycleFeed);
+        //StockRecycleAdapter.setClickListener(this);
+        recyclerView.setAdapter(notificationRecycleAdapter);
 
+        final TextView textView = binding.textNotifications;
+        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
+            }
+        });
         return root;
     }
 
@@ -61,4 +69,6 @@ public class NotificationsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 }
