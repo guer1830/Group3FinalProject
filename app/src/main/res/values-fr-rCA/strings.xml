@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Group3FinalProject</string>
+    <string name="title_home">Nouvelles</string>
+    <string name="title_dashboard">Bourses</string>
+    <string name="title_notifications">TODO</string>
+    <string name="myContentString">TODO</string>
+    <string name="RSSFeedManagementText">Gérer RSS alimente</string>
+    <string name="returnToRSSFeed">Revenir</string>
+    <string name="stock_symbol">symbole boursier</string>
+    <string name="add_stock_button">Ajouter des bourse</string>
+    <string name="search">Chercher</string>
+    <string name="time_range_one_day">1D</string>
+    <string name="time_range_one_week">1W</string>
+    <string name="time_range_one_month">1M</string>
+    <string name="time_range_three_month">3M</string>
+    <string name="time_range_one_year">1Y</string>
+    <string name="time_range_all">Tout</string>
+    <string name="quotes_open">Ouvert</string>
+    <string name="quotes_close">Précédent Fermer</string>
+    <string name="quotes_high">Haut</string>
+    <string name="quotes_low">Faible</string>
+    <string name="empty_not_saved">Le bourse était vide, non enregistré</string>
+    <string name="helpMenuText">Aider</string>
+    <string name="authors_title">Auteurs</string>
+    <string name="version_title">Numéro de version</string>
+    <string name="instructions_title">Instructions</string>
+    <string name="help_dialog_title">Aide</string>
+    <string name="button_ok_text">OK</string>
+    <string name="app_version">1.0</string>
+    <string name="app_instructions_description">TODO - Instructions</string>
+    <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
+</resources>

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     private ArrayList<RSSNewsObject> recyclerObjects;
@@ -42,7 +43,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                 String urlString = feed.getRSSFeedURL();
                 URL url = new URL(urlString);
                 InputStream inputStream = url.openConnection().getInputStream();
-                this.recyclerObjects.addAll(parseXMLFeed(inputStream));
+                this.recyclerObjects.addAll(parseXMLFeed(inputStream, feed));
                 return true;
             }
         }
@@ -51,7 +52,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         }
 
         //Sort the feed based on the publication date
-
+        Collections.shuffle(recyclerObjects);
         return false;
     }
 
@@ -61,7 +62,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         this.recyclerAdapter.setData(this.recyclerObjects);
     }
 
-    public ArrayList<RSSNewsObject> parseXMLFeed(InputStream inputStream) throws XmlPullParserException, IOException {
+    public ArrayList<RSSNewsObject> parseXMLFeed(InputStream inputStream, RSSNewsFeed RSSFeed) throws XmlPullParserException, IOException {
         String title = null;
         String description = null;
         String hyperLink = null;
@@ -71,6 +72,13 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         Boolean isObject = false;
         RSSNewsObject RSSNewsObject = new RSSNewsObject();
         ArrayList<RSSNewsObject> answerArr = new ArrayList<>();
+
+        String itemTag = RSSFeed.getItemTag();
+        String titleTag = RSSFeed.getTitleTag();
+        String descriptionTag = RSSFeed.getDescriptionTag();
+        String hyperLinkTag = RSSFeed.getHyperLinkTag();
+        String publicationDateTag = RSSFeed.getPublicationDateTag();
+        String imageLinkTag = RSSFeed.getImageLinkTag();
 
         try{
             //Create the XML Parser
@@ -88,7 +96,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                 }
                 //Log.d("XML",tagName);
                 if(eventType == XmlPullParser.END_TAG){
-                    if(tagName.equalsIgnoreCase("item")){
+                    if(tagName.equalsIgnoreCase(itemTag)){
                         isObject = false;
                         title = null;
                         description = null;
@@ -100,7 +108,7 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                 }
 
                 if(eventType == XmlPullParser.START_TAG){
-                    if(tagName.equalsIgnoreCase("item")) {
+                    if(tagName.equalsIgnoreCase(itemTag)) {
                         isObject = true;
                         continue;
                     }
@@ -113,16 +121,16 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                     feedParser.nextTag();
                 }
 
-                if (tagName.equalsIgnoreCase("title")){
+                if (tagName.equalsIgnoreCase(titleTag)){
                     title = currentTagText;
                 }
-                else if (tagName.equalsIgnoreCase("link")){
+                else if (tagName.equalsIgnoreCase(hyperLinkTag)){
                     hyperLink = currentTagText;
                 }
-                else if (tagName.equalsIgnoreCase("description")){
+                else if (tagName.equalsIgnoreCase(descriptionTag)){
                     description = currentTagText;
                 }
-                else if (tagName.equalsIgnoreCase("pubDate")){
+                else if (tagName.equalsIgnoreCase(publicationDateTag)){
                     publicationDate = currentTagText;
                 }
 
@@ -132,10 +140,6 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
                     RSSNewsObject.setArticleURL(hyperLink);
                     RSSNewsObject.setImageURL(imageLink);
                     RSSNewsObject.setPublicationDate(publicationDate);
-                    Log.d("XMLContent",title);
-                    Log.d("XMLContent",description);
-                    Log.d("XMLContent",hyperLink);
-                    Log.d("XMLContent",publicationDate);
                     title = null;
                     description = null;
                     hyperLink = null;
@@ -158,21 +162,21 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
 
 
     private Boolean checkIfObjectIsReady(RSSNewsObject object, String title, String description, String articleLink, String imageLink, String publicationDate){
-        Boolean isReady = true;
+        boolean isReady = true;
         if (object.isTitleRequired()){
-            isReady = (isReady & title != null);
+            isReady = (isReady && title != null);
         }
         if (object.isDescriptionRequired()){
-            isReady = (isReady & description != null);
+            isReady = (isReady && description != null);
         }
         if (object.isArticleLinkRequired()){
-            isReady = (isReady & articleLink != null);
+            isReady = (isReady && articleLink != null);
         }
         if (object.isImageRequired()){
-            isReady = (isReady & imageLink != null);
+            isReady = (isReady && imageLink != null);
         }
         if (object.isDateRequired()){
-            isReady = (isReady & publicationDate != null);
+            isReady = (isReady && publicationDate != null);
         }
 
         return isReady;

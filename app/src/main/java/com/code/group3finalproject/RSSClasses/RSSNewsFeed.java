@@ -3,50 +3,65 @@ package com.code.group3finalproject.RSSClasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class RSSNewsFeed implements Parcelable {
+import java.io.Serializable;
+
+public class RSSNewsFeed implements Serializable {
 
     private String RSSFeedURL;
-    private String includeFeed;
+    private Boolean includeFeed;
+    private String name;
 
-
-    protected RSSNewsFeed(Parcel in) {
-        RSSFeedURL = in.readString();
-        includeFeed = in.readString();
-    }
 
     public RSSNewsFeed() {
         this.RSSFeedURL = "";
-        this.includeFeed = "True";
+        this.includeFeed = Boolean.TRUE;
+        this.name = "";
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(RSSFeedURL);
-        dest.writeString(includeFeed);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<RSSNewsFeed> CREATOR = new Creator<RSSNewsFeed>() {
-        @Override
-        public RSSNewsFeed createFromParcel(Parcel in) {
-            return new RSSNewsFeed(in);
-        }
-
-        @Override
-        public RSSNewsFeed[] newArray(int size) {
-            return new RSSNewsFeed[size];
-        }
-    };
 
     public String getRSSFeedURL(){
         return this.RSSFeedURL;
     }
 
-    public boolean isIncluded(){
-        return this.includeFeed == "True";
+    public Boolean isIncluded(){
+        return this.includeFeed;
+    }
+
+    public String getRSSFeedName(){
+        return this.name;
+    }
+
+    public Boolean getIncludeFeed() {return this.includeFeed;}
+
+    public void toggleInclusion(){
+        if (this.includeFeed){
+            this.includeFeed = Boolean.FALSE;
+        }
+        else{
+            this.includeFeed = Boolean.TRUE;
+        }
+    }
+
+    public String getItemTag() {
+        return "";
+    }
+
+    public String getDescriptionTag() {
+        return "";
+    }
+
+    public String getHyperLinkTag() {
+        return "";
+    }
+
+    public String getPublicationDateTag() {
+        return "";
+    }
+
+    public String getImageLinkTag() {
+        return "";
+    }
+
+    public String getTitleTag() {
+        return "";
     }
 }

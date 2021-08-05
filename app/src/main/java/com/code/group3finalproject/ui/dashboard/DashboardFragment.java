@@ -1,6 +1,7 @@
 package com.code.group3finalproject.ui.dashboard;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +11,9 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +22,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,29 +39,42 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.code.group3finalproject.AddStockActivity;
 import com.code.group3finalproject.R;
-import com.code.group3finalproject.StockRecycleAdapter;
 import com.code.group3finalproject.databinding.FragmentDashboardBinding;
 import com.code.group3finalproject.db.StockDatabase;
 import com.code.group3finalproject.db.model.Stock;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import static android.app.Activity.RESULT_OK;
 
 public class DashboardFragment extends Fragment {
 
+    private static final int NEW_STOCK_ACTIVITY_REQUEST_CODE = 10;
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
     private StockRecycleAdapter StockRecycleAdapter;
-    private StockDatabase db;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("Stock Dashboard", "requestCode: " + requestCode + "resultCode: " + resultCode);
-        if (requestCode == 10) {
-            StockRecycleAdapter.refreshData(db.getStockDAO().getAll());
+        if (requestCode == NEW_STOCK_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            String stockSymbol = data.getStringExtra(AddStockActivity.EXTRA_REPLY);
+            if (!stockSymbol.isEmpty()) {
+                Stock mStock = new Stock(stockSymbol);
+                dashboardViewModel.insert(mStock);
+                return;
+            }
         }
+            Toast.makeText(
+                    this.getContext(),
+                    R.string.empty_not_saved,
+                    Toast.LENGTH_LONG).show();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,19 +85,11 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        db = StockDatabase.getInstance(root.getContext());
-
-        List<Stock> stockList = db.getStockDAO().getAll();
-
-        if (stockList.isEmpty()) {
-            createInitialData(root.getContext());
-            stockList = db.getStockDAO().getAll();
-        }
-
         final RecyclerView recyclerView = binding.stockList;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        StockRecycleAdapter = new StockRecycleAdapter(stockList);
+        StockRecycleAdapter = new StockRecycleAdapter();
         recyclerView.setAdapter(StockRecycleAdapter);
+        dashboardViewModel.getAllStocks().observe(getViewLifecycleOwner(), stocks -> StockRecycleAdapter.refreshData(stocks));
 
         ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -91,7 +102,7 @@ public class DashboardFragment extends Fragment {
                 if (direction == ItemTouchHelper.START) {
                     int position = viewHolder.getAdapterPosition();
                     Log.i("Stock Dashboard", "position to delete:" + position);
-                    db.getStockDAO().delete(StockRecycleAdapter.getItem(position));
+                    dashboardViewModel.delete(StockRecycleAdapter.getItem(position));
                     StockRecycleAdapter.deleteStock(position);
                 }
             }
@@ -151,7 +162,7 @@ public class DashboardFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                StockRecycleAdapter.refreshData(db.getStockDAO().getAll());
+                //TODO Refresh quote endpoint
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -179,7 +190,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.i("Stock Search", "text: " + newText);
-                StockRecycleAdapter.filter(db.getStockDAO().getAll(), newText.toUpperCase());
+                dashboardViewModel.searchStocks(newText.toUpperCase()).observe(getViewLifecycleOwner(), stocks -> StockRecycleAdapter.refreshData(stocks));
                 return true;
             }
         });
@@ -190,20 +201,34 @@ public class DashboardFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 Log.d("Dashboard Fragment", "Add Stock button clicked");
                 Intent intent = new Intent(getContext(), AddStockActivity.class);
-                startActivityForResult(intent, 10);
+                startActivityForResult(intent, NEW_STOCK_ACTIVITY_REQUEST_CODE);
                 return true;
             }
         });
-    }
 
-    private void createInitialData(Context context) {
-        StockDatabase db = StockDatabase.getInstance(context);
-        Stock stock1 = new Stock("AAPL");
-        db.getStockDAO().insert(stock1);
-        Stock stock2 = new Stock("IBM");
-        db.getStockDAO().insert(stock2);
-        Stock stock3 = new Stock("MSFT");
-        db.getStockDAO().insert(stock3);
+        MenuItem helpMenu = menu.findItem(R.id.appHelp);
+        helpMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Log.d("Dashboard Fragment", "Help menu button clicked");
+                AlertDialog.Builder help_dialog_builder = new AlertDialog.Builder(getContext());
+                LayoutInflater help_dialog_inflater = getActivity().getLayoutInflater();
+                View content = help_dialog_inflater.inflate(R.layout.help_dialog,null);
+                help_dialog_builder.setView(content);
+                //EditText dialogText = (EditText) content.findViewById(R.id.dialog_snack_text);
+                //dialogText.setText(action_one_message);
+                help_dialog_builder.setTitle(R.string.help_dialog_title);
+                help_dialog_builder.setPositiveButton(R.string.button_ok_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                AlertDialog help_dialog = help_dialog_builder.create();
+                help_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                help_dialog.show();
+                return true;
+            }
+        });
     }
 
     @Override

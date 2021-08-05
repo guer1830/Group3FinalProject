@@ -48,9 +48,9 @@ public class StockDetailActivity extends AppCompatActivity {
     private List<Pair<Date, Double>> historyPrices =new ArrayList<Pair<Date, Double>>();
     private List<Pair<Date, Double>> intradayPrices =new ArrayList<Pair<Date, Double>>();
 
-    final private String API_HISTORY_JSON_KEY = "Time Series (Daily)";
-    final private String API_INTRADAY_JSON_KEY = "Time Series (5min)";
-    final private String API_CLOSE_PRICE = "4. close";
+    final static private String API_HISTORY_JSON_KEY = "Time Series (Daily)";
+    final static private String API_INTRADAY_JSON_KEY = "Time Series (5min)";
+    final static private String API_CLOSE_PRICE = "4. close";
     private String stockSymbol = "";
 
     @Override
@@ -145,7 +145,7 @@ public class StockDetailActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
-    private Calendar getCurrentDate() {
+    protected Calendar getCurrentDate() {
         Calendar date = new GregorianCalendar();
         // reset hour, minutes, seconds and millis
         date.set(Calendar.HOUR_OF_DAY, 0);
@@ -155,7 +155,7 @@ public class StockDetailActivity extends AppCompatActivity {
         return date;
     }
 
-    private void populateQuotes() {
+    protected void populateQuotes() {
         try {
             JSONObject quotes = (JSONObject) new StockQuotesAPI(stockSymbol).execute().get();
             TextView open_text = (TextView) findViewById(R.id.stock_open);
@@ -178,6 +178,9 @@ public class StockDetailActivity extends AppCompatActivity {
 
     private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices) {
         ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
+        if (stockPrices.isEmpty()) {
+            return;
+        }
 
         double maxPrice = 0;
         double minPrice = Double.MAX_VALUE;
@@ -209,7 +212,12 @@ public class StockDetailActivity extends AppCompatActivity {
         graph.getGridLabelRenderer().setNumHorizontalLabels(10);
     }
 
-    private class StockQuotesAPI extends AsyncTask<Void, Void, JSONObject> {
+    public void returnToMainView(View view){
+        Log.d("StockDetailView","returning to main");
+        finish();
+    }
+
+    protected static class StockQuotesAPI extends AsyncTask<Void, Void, JSONObject> {
         String symbol;
 
         StockQuotesAPI(String symbol) {
@@ -224,6 +232,10 @@ public class StockDetailActivity extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(Void... params) {
+            return doWork();
+        }
+
+        protected JSONObject doWork() {
             String api = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + this.symbol + "&apikey=BB7UNOS363WF0ETZ";
 
             try {
@@ -249,7 +261,7 @@ public class StockDetailActivity extends AppCompatActivity {
         }
     }
 
-    private class StockAPITask extends AsyncTask<Void, Void, Object> {
+    protected static class StockAPITask extends AsyncTask<Void, Void, Object> {
         String symbol;
         STOCK_COMMAND command;
 
@@ -266,11 +278,15 @@ public class StockDetailActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Void... params) {
+            return doWork();
+        }
+
+        protected Object doWork() {
             List<Pair<Date, Double>> datePrices =new ArrayList<Pair<Date, Double>>();
             String api = "";
             String pattern = "";
             String jsonKey = "";
-                    //https://github.com/sfuhrm/yahoofinance-api
+            //https://github.com/sfuhrm/yahoofinance-api
             switch (this.command) {
                 case INTRADAY:
                     api = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + this.symbol + "&interval=5min&apikey=BB7UNOS363WF0ETZ";
