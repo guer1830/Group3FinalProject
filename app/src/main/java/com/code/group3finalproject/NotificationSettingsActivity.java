@@ -27,7 +27,7 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    initWorkManager(15);
+                    initWorkManager(1);
                 }else{
                     WorkManager.getInstance(NotificationSettingsActivity.this).cancelAllWork();
                 }
