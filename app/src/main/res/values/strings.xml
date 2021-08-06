@@ -2,8 +2,8 @@
     <string name="app_name">Group3FinalProject</string>
     <string name="title_home">News</string>
     <string name="title_dashboard">Stocks</string>
-    <string name="title_notifications">Guide</string>
-    <string name="myContentString">TODO</string>
+    <string name="title_notifications">Notification</string>
+    <string name="myContentString">Notification</string>
     <string name="RSSFeedManagementText">Manage RSS Feeds</string>
     <string name="returnToRSSFeed">Return</string>
     <string name="stock_symbol">Stock Symbol</string>
@@ -29,5 +29,4 @@
     <string name="app_version">1.0</string>
     <string name="app_instructions_description">TODO - Instructions</string>
     <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
-    <string name="app_instructions">App Instructions</string>
 </resources>
