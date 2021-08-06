@@ -21,14 +21,14 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_weight="2"
-                android:text="open" />
+                android:text="@string/stock_detail_open" />
             <Button
                 android:id="@+id/stock_detail_go_back"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
                 android:textSize="10sp"
-                android:text="back"
+                android:text="@string/stock_detail_back"
                 android:onClick="returnToMainView"/>
         </LinearLayout>
 

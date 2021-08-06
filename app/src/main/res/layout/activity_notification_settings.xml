@@ -12,7 +12,7 @@
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notification"
+        android:text="@string/notification_Settings_notifcation_title"
         android:checked="true"
         />
     <EditText
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:hint="Interval(Min 15 mins)"
+        android:hint="@string/notification_settings_interval_min"
         android:inputType="number"
         />
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="20dp"
-        android:text="set interval"
+        android:text="@string/notification_interval_set_interval"
         app:layout_constraintTop_toBottomOf="@id/etInterval"
         />
 

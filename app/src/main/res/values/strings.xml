@@ -29,4 +29,12 @@
     <string name="app_version">1.0</string>
     <string name="app_instructions_description">TODO - Instructions</string>
     <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
+    <string name="app_instructions">App Instructions</string>
+    <string name="add_stock_search">Search</string>
+    <string name="notification_Settings_notifcation_title">Notification</string>
+    <string name="notification_settings_interval_min">Interval(Min 15 mins)</string>
+    <string name="notification_interval_set_interval">set interval</string>
+    <string name="stock_detail_back">back</string>
+    <string name="stock_detail_open">open</string>
+    <string name="RSS_management_include">Include</string>
 </resources>
