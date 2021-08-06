@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AddStockActivity">
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addStockButton"
         android:layout_width="wrap_content"
@@ -16,14 +17,22 @@
         android:layout_margin="16dp"
         android:onClick="addStockButton_OnClick"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/Searchtext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Search"
-        android:inputType="text" >
-        <requestFocus />
-    </AutoCompleteTextView>
+
+        <AutoCompleteTextView
+            android:id="@+id/Searchtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Search"
+            android:inputType="text" >
+            <requestFocus />
+        </AutoCompleteTextView>
+
+
+
+
+
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

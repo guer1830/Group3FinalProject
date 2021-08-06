@@ -1,8 +1,5 @@
 package com.code.group3finalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,26 +11,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.app.AlertDialog;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.code.group3finalproject.db.StockDatabase;
-import com.code.group3finalproject.db.model.Stock;
+import androidx.appcompat.app.AppCompatActivity;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +32,9 @@ public class AddStockActivity extends AppCompatActivity {
     String changedText;
     List<String>stockSymbolList;
     List<String>stockNameList = new ArrayList<String>();
+
+
+
 
     public static final String EXTRA_REPLY = "com.code.group3finalproject.AddStockActivity.REPLY";
 
@@ -156,11 +144,12 @@ public class AddStockActivity extends AppCompatActivity {
 
             Log.i("onPostExecute():","On Post Execute:::::::::::::"+stockSymbolList);
            ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
-                    android.R.layout.simple_dropdown_item_1line, stockSymbolList);
+                    android.R.layout.simple_list_item_1, stockSymbolList);
             SearchText.setThreshold(0);
             SearchText.setAdapter(adapter);
         }
     }
+
 
     public void parseJSON(String response) throws JSONException {
         JSONObject jsonObj = new JSONObject(response);
@@ -169,6 +158,9 @@ public class AddStockActivity extends AppCompatActivity {
         Symbol = result.getString("Symbol");
 
     }
+
+
+
 
     public void addStockButton_OnClick(View view) {
         Log.d("AddStockActivity","Add Stock Button clicked");
@@ -183,10 +175,6 @@ public class AddStockActivity extends AppCompatActivity {
             replyIntent.putExtra(EXTRA_REPLY, word);
             setResult(RESULT_OK, replyIntent);
         }
-
-        StockDatabase db = StockDatabase.getInstance(this.getApplicationContext());
-        Stock stock1 = new Stock(stockSymbol.getText().toString());
-        db.getStockDAO().insert(stock1);
 
         finish();
     }
