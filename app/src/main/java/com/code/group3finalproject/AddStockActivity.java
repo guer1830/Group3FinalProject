@@ -30,8 +30,8 @@ public class AddStockActivity extends AppCompatActivity {
     String Name;
     String Symbol;
     String changedText;
-    List<String>stockSymbolList;
-    List<String>stockNameList = new ArrayList<String>();
+    static List<String>stockSymbolList;
+    static List<String>stockNameList = new ArrayList<String>();
 
 
 
@@ -64,91 +64,88 @@ public class AddStockActivity extends AppCompatActivity {
                // if (!changedText.equals("")) {
                     stockNameList.clear();
                     stockSymbolList.clear();
-                    new GetContacts().execute();
+                    //}
+                    new GetContacts(changedText).execute();
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
+                        android.R.layout.simple_list_item_1, stockSymbolList);
+                SearchText.setThreshold(0);
+                SearchText.setAdapter(adapter);
 
-                //}
+
             }
         });
 
     }
 
-    private class GetContacts extends AsyncTask<Void, Void, Void> {
+    protected static class GetContacts extends AsyncTask<Void, Void, Void> {
+        String changedText;
+        GetContacts(String changedText) {
+             this.changedText = changedText;
+        }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(AddStockActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+            // Toast.makeText(AddStockActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
 
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
-            // Making a request to url and getting response
-            Log.i("AddStockActivity","url fetching");
-            String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + changedText +"&apikey=A17S0FRD7LSUFI01";
-
-            String jsonStr = sh.makeServiceCall(url);
-
-            Log.i(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-                    //Log.i("MRN", "json obj made : " + jsonObj.toString());
-                    // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("bestMatches");
-
-                    // looping through All Contacts
-                    for (int i = 0; i < contacts.length(); i++) {
-                        JSONObject c = contacts.getJSONObject(i);
-                        String id = c.getString("1. symbol");
-                        Log.i(TAG, "1. symbol\t\t: " + id);
-                        String name = c.getString("2. name");
-                        Log.i(TAG, "2. name\t: " + name);
-                        stockSymbolList.add(id);
-                        stockNameList.add(name);
-                    }
-                    Log.i(TAG, "stockSymbolSIZE......." + stockSymbolList.size());
-
-
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-
+            JSONArray contacts = doBGWork();
+            try {
+                for (int i = 0; i < contacts.length(); i++) {
+                    JSONObject c = contacts.getJSONObject(i);
+                    String id = c.getString("1. symbol");
+                    Log.i(TAG, "1. symbol\t\t: " + id);
+                    String name = c.getString("2. name");
+                    Log.i(TAG, "2. name\t: " + name);
+                    stockSymbolList.add(id);
+                    stockNameList.add(name);
                 }
+                Log.i(TAG, "stockSymbolSIZE......." + stockSymbolList.size());
 
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+            } catch(Exception e) {
+                //
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             Log.i("onPostExecute():","On Post Execute:::::::::::::"+stockSymbolList);
-           ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
-                    android.R.layout.simple_list_item_1, stockSymbolList);
-            SearchText.setThreshold(0);
-            SearchText.setAdapter(adapter);
+
+        }
+
+        protected JSONArray doBGWork() {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            //Log.i("AddStockActivity","url fetching");
+            String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + this.changedText +"&apikey=A17S0FRD7LSUFI01";
+
+            String jsonStr = sh.makeServiceCall(url);
+
+            //Log.i(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    // Getting JSON Array node
+                    JSONArray contacts = jsonObj.getJSONArray("bestMatches");
+                    return contacts;
+                    // looping through All Contacts
+
+                } catch (final JSONException e) {
+                    //Log.e(TAG, "Json parsing error: " + e.getMessage());
+                }
+
+            } else {
+                //Log.e(TAG, "Couldn't get json from server.");
+            }
+
+            return null;
         }
     }
+
 
 
     public void parseJSON(String response) throws JSONException {
@@ -158,9 +155,6 @@ public class AddStockActivity extends AppCompatActivity {
         Symbol = result.getString("Symbol");
 
     }
-
-
-
 
     public void addStockButton_OnClick(View view) {
         Log.d("AddStockActivity","Add Stock Button clicked");
