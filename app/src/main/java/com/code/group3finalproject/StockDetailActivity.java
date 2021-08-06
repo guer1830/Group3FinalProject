@@ -158,15 +158,17 @@ public class StockDetailActivity extends AppCompatActivity {
     protected void populateQuotes() {
         try {
             JSONObject quotes = (JSONObject) new StockQuotesAPI(stockSymbol).execute().get();
-            TextView open_text = (TextView) findViewById(R.id.stock_open);
-            TextView close_text = (TextView) findViewById(R.id.stock_close);
-            TextView low_text = (TextView) findViewById(R.id.stock_low);
-            TextView high_text = (TextView) findViewById(R.id.stock_high);
+            if (quotes != null) {
+                TextView open_text = (TextView) findViewById(R.id.stock_open);
+                TextView close_text = (TextView) findViewById(R.id.stock_close);
+                TextView low_text = (TextView) findViewById(R.id.stock_low);
+                TextView high_text = (TextView) findViewById(R.id.stock_high);
 
-            open_text.setText("open: " + quotes.get("02. open"));
-            close_text.setText("previous close: " + quotes.get("08. previous close"));
-            low_text.setText("low: " + quotes.get("04. low"));
-            high_text.setText("high: " + quotes.get("03. high"));
+                open_text.setText("open: " + quotes.get("02. open"));
+                close_text.setText("previous close: " + quotes.get("08. previous close"));
+                low_text.setText("low: " + quotes.get("04. low"));
+                high_text.setText("high: " + quotes.get("03. high"));
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
