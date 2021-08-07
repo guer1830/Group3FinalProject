@@ -5,9 +5,6 @@ import androidx.work.Data;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-import androidx.work.testing.TestDriver;
-import androidx.work.testing.WorkManagerTestInitHelper;
-
 import com.code.group3finalproject.workmanager.NotificationWorker;
 
 import org.junit.Test;

@@ -33,30 +33,6 @@ import static org.junit.Assert.assertTrue;
 public class TestRSSNewsFeeds {
 
 
-    /*
-    @Test
-    public void testFetchRSSNewsFeeds() {
-
-         HomeViewModel homeViewModel;
-         FragmentHomeBinding binding;
-         RSSFeedRecyclerViewAdapter RSSRecycleFeed;
-         RSSManagedClasses feedManager = null;
-         View root;
-        HomeFragment frag = new HomeFragment();
-
-
-        RecyclerView recyclerView = frag.getActivity().findViewById(R.id.recycleFeed);
-        recyclerView.setLayoutManager(new LinearLayoutManager(frag.getActivity()));
-        RSSRecycleFeed = new RSSFeedRecyclerViewAdapter(frag.getActivity(), new ArrayList<>());
-        RSSRecycleFeed.setClickListener(frag);
-        recyclerView.setAdapter(RSSRecycleFeed);
-
-        new fetchRSSFeeds(RSSRecycleFeed, feedManager, frag.getActivity().findViewById(R.id.loadingRSSFeed)).execute((Void) null);
-        assertTrue(feedManager.getSelectedFeeds().size() > 0);
-    }
-    */
-
-
     @Test
     public void generalRSSNewsObjectClass(){
         RSSNewsObject myObj = new RSSNewsObject();
