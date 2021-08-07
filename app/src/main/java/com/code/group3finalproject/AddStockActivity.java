@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,7 @@ public class AddStockActivity extends AppCompatActivity {
     String changedText;
     static List<String>stockSymbolList;
     static List<String>stockNameList = new ArrayList<String>();
-
-
-
+    int count = 0;
 
     public static final String EXTRA_REPLY = "com.code.group3finalproject.AddStockActivity.REPLY";
 
@@ -61,11 +58,16 @@ public class AddStockActivity extends AppCompatActivity {
                 Log.i("TypedText", "= "+text);
                 changedText = text;
 
-               // if (!changedText.equals("")) {
-                    stockNameList.clear();
-                    stockSymbolList.clear();
-                    //}
+                // if (!changedText.equals("")) {
+                stockNameList.clear();
+                stockSymbolList.clear();
+                //}
+                if(count <= 5) {
                     new GetContacts(changedText).execute();
+                    count++;
+                } else {
+                    Toast.makeText(AddStockActivity.this,"!!!Exceeded 5 API Calls for stock search!!!",Toast.LENGTH_LONG).show();
+                }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
                         android.R.layout.simple_list_item_1, stockSymbolList);
                 SearchText.setThreshold(0);
@@ -85,8 +87,6 @@ public class AddStockActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Toast.makeText(AddStockActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
-
         }
 
         @Override
@@ -125,7 +125,6 @@ public class AddStockActivity extends AppCompatActivity {
 
             String jsonStr = sh.makeServiceCall(url);
 
-            //Log.i(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
