@@ -1,7 +1,10 @@
 package com.code.group3finalproject;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,6 +17,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -168,8 +173,32 @@ public class AddStockActivity extends AppCompatActivity {
             String word = stockSymbol.getText().toString();
             replyIntent.putExtra(EXTRA_REPLY, word);
             setResult(RESULT_OK, replyIntent);
+            showNotif(stockSymbol.getText().toString());
         }
 
+
         finish();
+    }
+
+    private void showNotif(String s){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"111" )
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("New stock added")
+                .setContentText(s)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "abc";
+            String description = "def";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("111", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            notificationManager.createNotificationChannel(channel);
+        }
+        notificationManager.notify(1,builder.build());
     }
 }
