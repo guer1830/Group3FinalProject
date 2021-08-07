@@ -1,5 +1,6 @@
 package com.code.group3finalproject.ui.dashboard;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.code.group3finalproject.APIEndPoints.QuoteAPIEndPoint;
 import com.code.group3finalproject.R;
 import com.code.group3finalproject.StockDetailActivity;
 import com.code.group3finalproject.db.model.Stock;
@@ -39,7 +41,12 @@ public class StockRecycleAdapter extends RecyclerView.Adapter<StockViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull StockViewHolder holder, int position) {
-        holder.stockSymbol.setText(stocks.get(position).getSymbol());
+        String symbol = stocks.get(position).getSymbol();
+        holder.stockSymbol.setText(symbol);
+        Log.i("StockAdapter", "Calling API for " + symbol);
+        QuoteAPIEndPoint apiQuote = new QuoteAPIEndPoint(symbol, "7LNWQYQBY4YT4DAZ", holder.stockPrice);
+        apiQuote.execute();
+        //holder.stockPrice.setText("$20.00");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

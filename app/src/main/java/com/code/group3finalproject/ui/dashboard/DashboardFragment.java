@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.code.group3finalproject.APIEndPoints.QuoteAPIEndPoint;
 import com.code.group3finalproject.AddStockActivity;
 import com.code.group3finalproject.R;
 import com.code.group3finalproject.databinding.FragmentDashboardBinding;
