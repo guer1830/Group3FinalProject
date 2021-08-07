@@ -1,22 +1,11 @@
 package com.code.group3finalproject.db;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
-
 import com.code.group3finalproject.db.dao.StockDAO;
-import com.code.group3finalproject.db.dao.StockRepository;
 import com.code.group3finalproject.db.model.Stock;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,9 +37,5 @@ public abstract class StockDatabase extends RoomDatabase {
                     getStockDAO().insert(new Stock("AAPL"), new Stock("FB"), new Stock("MSFT"));
                 }
             });
-    }
-
-    public void cleanUp() {
-        stockDB = null;
     }
 }

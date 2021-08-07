@@ -41,13 +41,6 @@ public interface StockDAO {
     void insert(Stock... stock);
 
     /*
-     * update the object in database
-     * @param stock, object to be updated
-     */
-    @Update
-    void update(Stock stock);
-
-    /*
      * delete the object from database
      * @param stock, object to be deleted
      */

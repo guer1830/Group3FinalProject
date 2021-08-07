@@ -31,12 +31,6 @@ public class StockRepository {
         });
     }
 
-    public void insert(Stock... stock) {
-        StockDatabase.databaseWriteExecutor.execute(() -> {
-            mStockDAO.insert(stock);
-        });
-    }
-
     public void delete(Stock stock) {
         StockDatabase.databaseWriteExecutor.execute(() -> {
             mStockDAO.delete(stock);
