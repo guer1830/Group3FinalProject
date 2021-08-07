@@ -16,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.R)
 public class AddStockActivity extends AppCompatActivity {
     private static String TAG = "AddStockActivity";
     private AutoCompleteTextView SearchText;
@@ -36,7 +38,10 @@ public class AddStockActivity extends AppCompatActivity {
     String changedText;
     static List<String>stockSymbolList;
     static List<String>stockNameList = new ArrayList<String>();
+    ArrayList<String> APIKeys = new ArrayList<>(List.of("A17S0FRD7LSUFI01","0VLLM0XI2K69R9S1","P8QLY30TBO83QJV6","VOWL05S70F9AHQQD","9MLT1AHK8DK9J45Y","6U3CR4XTV8H80PTS"));
     int count = 0;
+
+
 
     public static final String EXTRA_REPLY = "com.code.group3finalproject.AddStockActivity.REPLY";
 
@@ -67,27 +72,28 @@ public class AddStockActivity extends AppCompatActivity {
                 stockNameList.clear();
                 stockSymbolList.clear();
                 //}
-                if(count <= 5) {
-                    new GetContacts(changedText).execute();
+                if(count < APIKeys.size() * 5) {
+                    new GetContacts(changedText, APIKeys.get(count/5)).execute();
                     count++;
                 } else {
+                    count = 0;
                     Toast.makeText(AddStockActivity.this,"!!!Exceeded 5 API Calls for stock search!!!",Toast.LENGTH_LONG).show();
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
-                        android.R.layout.simple_list_item_1, stockSymbolList);
-                SearchText.setThreshold(0);
-                SearchText.setAdapter(adapter);
-
+                Log.d("add","here");
 
             }
         });
 
     }
 
-    protected static class GetContacts extends AsyncTask<Void, Void, Void> {
+    protected  class GetContacts extends AsyncTask<Void, Void, Void> {
         String changedText;
-        GetContacts(String changedText) {
+        String apiKey;
+
+        GetContacts(String changedText, String API) {
              this.changedText = changedText;
+             this.apiKey = API;
+
         }
         @Override
         protected void onPreExecute() {
@@ -119,14 +125,18 @@ public class AddStockActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Log.i("onPostExecute():","On Post Execute:::::::::::::"+stockSymbolList);
-
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddStockActivity.this,
+                    android.R.layout.simple_list_item_1, stockSymbolList);
+            SearchText.setThreshold(0);
+            SearchText.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
         protected JSONArray doBGWork() {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
             //Log.i("AddStockActivity","url fetching");
-            String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + this.changedText +"&apikey=A17S0FRD7LSUFI01";
+            String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + this.changedText +"&apikey=" + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
 

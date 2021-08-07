@@ -1,6 +1,11 @@
 package com.code.group3finalproject;
 
 import android.content.Context;
+import android.view.View;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.code.group3finalproject.RSSClasses.Feeds.CNNBusiness;
 import com.code.group3finalproject.RSSClasses.Feeds.CNNFinance;
@@ -12,6 +17,9 @@ import com.code.group3finalproject.RSSClasses.Feeds.YahooFinance;
 import com.code.group3finalproject.RSSClasses.RSSManagedClasses;
 import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 import com.code.group3finalproject.RSSClasses.RSSNewsObject;
+import com.code.group3finalproject.databinding.FragmentHomeBinding;
+import com.code.group3finalproject.ui.home.HomeFragment;
+import com.code.group3finalproject.ui.home.HomeViewModel;
 
 import org.junit.Test;
 
@@ -20,8 +28,34 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestRSSNewsFeeds {
+
+
+    /*
+    @Test
+    public void testFetchRSSNewsFeeds() {
+
+         HomeViewModel homeViewModel;
+         FragmentHomeBinding binding;
+         RSSFeedRecyclerViewAdapter RSSRecycleFeed;
+         RSSManagedClasses feedManager = null;
+         View root;
+        HomeFragment frag = new HomeFragment();
+
+
+        RecyclerView recyclerView = frag.getActivity().findViewById(R.id.recycleFeed);
+        recyclerView.setLayoutManager(new LinearLayoutManager(frag.getActivity()));
+        RSSRecycleFeed = new RSSFeedRecyclerViewAdapter(frag.getActivity(), new ArrayList<>());
+        RSSRecycleFeed.setClickListener(frag);
+        recyclerView.setAdapter(RSSRecycleFeed);
+
+        new fetchRSSFeeds(RSSRecycleFeed, feedManager, frag.getActivity().findViewById(R.id.loadingRSSFeed)).execute((Void) null);
+        assertTrue(feedManager.getSelectedFeeds().size() > 0);
+    }
+    */
+
 
     @Test
     public void generalRSSNewsObjectClass(){

@@ -11,22 +11,22 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class TestAddStockActivity {
 
+
     @Test
     public void testEmptyStockQuotes () {
-       JSONArray stock = new AddStockActivity.GetContacts("").doBGWork();
+       JSONArray stock = new AddStockActivity().new GetContacts("","6U3CR4XTV8H80PTS").doBGWork();
         assertEquals(stock, null);
     }
 
     @Test
     public void testValidStockQuotes () {
-        JSONArray stock = new AddStockActivity.GetContacts("TM").doBGWork();
+        JSONArray stock = new AddStockActivity().new GetContacts("TM","6U3CR4XTV8H80PTS").doBGWork();
         assertTrue(stock.length() > 0);
     }
 
     @Test
     public void testInValidStockQuotes () {
-        JSONArray stock = new AddStockActivity.GetContacts(":").doBGWork();
+        JSONArray stock = new AddStockActivity().new GetContacts(":","6U3CR4XTV8H80PTS").doBGWork();
         assertTrue(stock.length() == 0);
-    }
-
+        }
 }
