@@ -48,7 +48,6 @@ public class NotificationRecycleAdapter extends RecyclerView.Adapter<Notificatio
             }
         });
     }
-
     @Override
     public int getItemCount() {
         return stocks.size();
