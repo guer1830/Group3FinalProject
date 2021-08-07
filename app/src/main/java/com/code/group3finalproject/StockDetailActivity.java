@@ -53,6 +53,8 @@ public class StockDetailActivity extends AppCompatActivity {
     final static private String API_INTRADAY_JSON_KEY = "Time Series (5min)";
     final static private String API_CLOSE_PRICE = "4. close";
     private String stockSymbol = "";
+    static ArrayList<String> APIKeys = new ArrayList<>(List.of("WXJLN4LO84RM3D7N","9WZPCTEGQG3C7W6Y","RZJ00B9YJEXSXRM1","Y1PSH1HLWOIXGQKU","7QL7T942WEIV77PM","T9YY3H65VFYXKQ3H"));
+    static int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,7 +243,7 @@ public class StockDetailActivity extends AppCompatActivity {
         }
 
         protected JSONObject doWork() {
-            String api = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + this.symbol + "&apikey=BB7UNOS363WF0ETZ";
+            String api = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + this.symbol + "&apikey=" + APIKeys.get(count++ % APIKeys.size());
 
             try {
                 URL stockApi = new URL(api);
@@ -294,12 +296,12 @@ public class StockDetailActivity extends AppCompatActivity {
             //https://github.com/sfuhrm/yahoofinance-api
             switch (this.command) {
                 case INTRADAY:
-                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + this.symbol + "&interval=5min&apikey=BB7UNOS363WF0ETZ";
+                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=" + this.symbol + "&interval=5min&apikey=" + APIKeys.get(count++ % APIKeys.size());
                     pattern = "yyyy-MM-dd HH:mm:ss";
                     jsonKey = API_INTRADAY_JSON_KEY;
                     break;
                 case HISTORY:
-                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + this.symbol + "&outputsize=full&apikey=BB7UNOS363WF0ETZ";
+                    api = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + this.symbol + "&outputsize=full&apikey=" + APIKeys.get(count++ % APIKeys.size());
                     pattern = "yyyy-MM-dd";
                     jsonKey = API_HISTORY_JSON_KEY;
                     break;
