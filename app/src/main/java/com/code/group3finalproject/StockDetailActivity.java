@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -168,6 +169,8 @@ public class StockDetailActivity extends AppCompatActivity {
                 close_text.setText("previous close: " + quotes.get("08. previous close"));
                 low_text.setText("low: " + quotes.get("04. low"));
                 high_text.setText("high: " + quotes.get("03. high"));
+            }else {
+                Toast.makeText(StockDetailActivity.this,"Exceeding rate limit of AlphaAdvantage API (5 per minute)",Toast.LENGTH_LONG).show();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
