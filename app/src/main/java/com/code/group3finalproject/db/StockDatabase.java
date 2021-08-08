@@ -9,15 +9,32 @@ import com.code.group3finalproject.db.model.Stock;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The type Stock database.
+ */
 @Database(entities = {Stock.class}, version = 1)
 public abstract class StockDatabase extends RoomDatabase {
 
+    /**
+     * Gets stock dao.
+     *
+     * @return the stock dao
+     */
     public abstract StockDAO getStockDAO();
     private static volatile StockDatabase stockDB;
     private static final int NUMBER_OF_THREADS = 4;
+    /**
+     * The constant databaseWriteExecutor.
+     */
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
+    /**
+     * Gets instance.
+     *
+     * @param context the context
+     * @return the instance
+     */
     public static synchronized StockDatabase getInstance(Context context) {
                 if (stockDB == null) {
                     stockDB = Room.databaseBuilder(context, StockDatabase.class, "StockDB.db")

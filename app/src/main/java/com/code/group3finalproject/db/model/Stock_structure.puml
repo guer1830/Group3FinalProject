@@ -1,0 +1,297 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": ""
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false // root node is included
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.code.group3finalproject.db.model.Stock"
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_3059181 { 
+   	label=code
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2013106664 { 
+   	label=group3finalproject
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   DashboardFragment1833276445[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DashboardFragment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   StockRecycleAdapter: StockRecycleAdapter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   binding: FragmentDashboardBinding [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   dashboardViewModel: DashboardViewModel [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onActivityResult(requestCode: int, resultCode: int, data: Intent)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateOptionsMenu(menu: Menu, inflater: MenuInflater)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onDestroyView()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DashboardViewModel1833276445[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DashboardViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mAllStocks: LiveData&lt;List&lt;Stock&gt;&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mStockRepository: StockRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" ># searchStocks(stockSymbol: String): LiveData&lt;List&lt;Stock&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+NotificationRecycleAdapter543206927[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)NotificationRecycleAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   stocks: List&lt;Stock&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onBindViewHolder(holder: ViewHolder, position: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateViewHolder(parent: ViewGroup, viewType: int): ViewHolder</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Stock863291492[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Stock</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   symbol: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDAO_Impl1943224517[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDAO_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   __db: RoomDatabase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __deletionAdapterOfStock: EntityDeletionOrUpdateAdapter&lt;Stock&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __insertionAdapterOfStock: EntityInsertionAdapter&lt;Stock&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ count(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock...)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock...)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ searchValue(stockSymbol: String): LiveData&lt;List&lt;Stock&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabase1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabase</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(context: Context): StockDatabase</TD></TR>
+<TR><TD ALIGN="LEFT" >- populateInitialData()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabaseTest1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabaseTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   db: StockDatabase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   instantTaskExecutorRule: InstantTaskExecutorRule [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   stockDAO: StockDAO [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   stockSymbol: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ insertAndDeleteMultipleStocks()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertAndDeleteStock()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertAndReadStock()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemCount()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ tearDown()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabase_Impl1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabase_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   _stockDAO: StockDAO [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ clearAllTables()</TD></TR>
+<TR><TD ALIGN="LEFT" ># createInvalidationTracker(): InvalidationTracker</TD></TR>
+<TR><TD ALIGN="LEFT" ># createOpenHelper(configuration: DatabaseConfiguration): SupportSQLiteOpenHelper</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockRecycleAdapter1833276445[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockRecycleAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   stocks: List&lt;Stock&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deleteStock(position: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ filter(stocks: List&lt;Stock&gt;, filter: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getItem(position: int): Stock</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onBindViewHolder(holder: StockViewHolder, position: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateViewHolder(parent: ViewGroup, viewType: int): StockViewHolder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ refreshData(stocks: List&lt;Stock&gt;)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockRepository1943224517[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   mAllStocks: LiveData&lt;List&lt;Stock&gt;&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mStockDAO: StockDAO [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ searchValue(stockSymbol: String): LiveData&lt;List&lt;Stock&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+DashboardFragment1833276445 -> DashboardViewModel1833276445[label="dashboardViewModel
+[0..1]"];
+DashboardFragment1833276445 -> StockRecycleAdapter1833276445[label="StockRecycleAdapter
+[0..1]"];
+DashboardViewModel1833276445 -> Stock863291492[label="mAllStocks
+[0..1]"];
+DashboardViewModel1833276445 -> StockRepository1943224517[label="mStockRepository
+[0..1]"];
+NotificationRecycleAdapter543206927 -> Stock863291492[label="stocks
+[0..*]"];
+StockDAO_Impl1943224517 -> Stock863291492[label="__deletionAdapterOfStock
+[0..1]"];
+StockDAO_Impl1943224517 -> Stock863291492[label="__insertionAdapterOfStock
+[0..1]"];
+StockDatabase1798959967 -> StockDatabase_Impl1798959967[arrowhead=none, arrowtail=empty, dir=both];
+StockDatabaseTest1798959967 -> StockDAO_Impl1943224517[label="stockDAO
+[0..1]"];
+StockDatabaseTest1798959967 -> StockDatabase1798959967[label="db
+[0..1]"];
+StockDatabase_Impl1798959967 -> StockDAO_Impl1943224517[label="_stockDAO
+[0..1]"];
+StockRecycleAdapter1833276445 -> Stock863291492[label="stocks
+[0..*]"];
+StockRepository1943224517 -> Stock863291492[label="mAllStocks
+[0..1]"];
+StockRepository1943224517 -> StockDAO_Impl1943224517[label="mStockDAO
+[0..1]"];
+    
+}
+@enduml

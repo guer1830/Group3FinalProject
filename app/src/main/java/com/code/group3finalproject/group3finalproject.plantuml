@@ -1,0 +1,254 @@
+@startuml
+
+title __GROUP3FINALPROJECT's Class Diagram__\n
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.AddStockActivity {
+        {static} + EXTRA_REPLY : String
+        ~ APIKeys : ArrayList<String>
+        ~ Name : String
+        ~ Symbol : String
+        ~ changedText : String
+        ~ company_Symbol : String
+        ~ count : int
+        {static} ~ stockNameList : List<String>
+        {static} ~ stockSymbolList : List<String>
+        ~ stockURL : String
+        - SearchText : AutoCompleteTextView
+        {static} - TAG : String
+        + addStockButton_OnClick()
+        + parseJSON()
+        # onCreate()
+        - showNotif()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.AddStockActivity.GetContacts {
+        ~ apiKey : String
+        ~ changedText : String
+        # doBGWork()
+        # doInBackground()
+        # onPostExecute()
+        # onPreExecute()
+        ~ GetContacts()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.HttpHandler {
+        {static} - TAG : String
+        + HttpHandler()
+        + makeServiceCall()
+        - convertStreamToString()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.MainActivity {
+        + onManagementCLick()
+        # onCreate()
+        - initWorkManager()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.NotificationSettingsActivity {
+        # onCreate()
+        - initWorkManager()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.RSSFeedManager {
+        + onItemClick()
+        + returnToRSSFeed()
+        # onCreate()
+        # onPause()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.RSSFeedRecyclerViewAdapter {
+        - RSSInflater : LayoutInflater
+        - currentContext : Context
+        - recyclerData : ArrayList<RSSNewsObject>
+        + RSSFeedRecyclerViewAdapter()
+        + getItemCount()
+        + getRandomImage()
+        + onBindViewHolder()
+        + onCreateViewHolder()
+        + setClickListener()
+        + setData()
+        ~ getItem()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    interface com.code.group3finalproject.RSSFeedRecyclerViewAdapter.OnItemClickListener {
+        {abstract} + onItemClick()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.RSSFeedRecyclerViewAdapter.ViewHolder {
+        ~ RecyclerImageView : ImageView
+        ~ TitleTextView : TextView
+        ~ descriptionTextView : TextView
+        + ViewHolder()
+        + onClick()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.RSSManagerRecyclerViewAdapter {
+        - RSSInflater : LayoutInflater
+        - currentContext : Context
+        - recyclerData : ArrayList<RSSNewsFeed>
+        + RSSManagerRecyclerViewAdapter()
+        + getItemCount()
+        + onBindViewHolder()
+        + onCreateViewHolder()
+        + setClickListener()
+        + setData()
+        ~ getItem()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    interface com.code.group3finalproject.RSSManagerRecyclerViewAdapter.OnItemClickListener {
+        {abstract} + onItemClick()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.RSSManagerRecyclerViewAdapter.ViewHolder {
+        ~ feedTitleTestView : TextView
+        ~ inclusionButton : Button
+        + ViewHolder()
+        + onClick()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.StockDetailActivity {
+        {static} ~ APIKeys : ArrayList<String>
+        {static} ~ count : int
+        {static} - API_CLOSE_PRICE : String
+        {static} - API_HISTORY_JSON_KEY : String
+        {static} - API_INTRADAY_JSON_KEY : String
+        - historyPrices : List<Pair<Date, Double>>
+        - intradayPrices : List<Pair<Date, Double>>
+        - stockSymbol : String
+        + returnToMainView()
+        # getCurrentDate()
+        # getStockHistories()
+        # getStockIntraday()
+        # onCreate()
+        # populateQuotes()
+        - generateGraph()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    enum STOCK_COMMAND {
+      HISTORY
+      INTRADAY
+      QUOTES
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.StockDetailActivity.StockAPITask {
+        ~ symbol : String
+        # doInBackground()
+        # doWork()
+        # onPostExecute()
+        ~ StockAPITask()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.StockDetailActivity.StockQuotesAPI {
+        ~ symbol : String
+        # doInBackground()
+        # doWork()
+        # onPostExecute()
+        ~ StockQuotesAPI()
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    class com.code.group3finalproject.fetchRSSFeeds {
+        - pBar : ProgressBar
+        - pDialog : ProgressDialog
+        - recyclerObjects : ArrayList<RSSNewsObject>
+        + fetchRSSFeeds()
+        + parseXMLFeed()
+        # doInBackground()
+        # onPostExecute()
+        # onPreExecute()
+        - checkIfObjectIsReady()
+    }
+  }
+  
+
+  com.code.group3finalproject.AddStockActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.code.group3finalproject.AddStockActivity +-down- com.code.group3finalproject.AddStockActivity.GetContacts
+  com.code.group3finalproject.AddStockActivity.GetContacts -up-|> android.os.AsyncTask
+  com.code.group3finalproject.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.code.group3finalproject.MainActivity o-- com.code.group3finalproject.databinding.ActivityMainBinding : binding
+  com.code.group3finalproject.NotificationSettingsActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.code.group3finalproject.NotificationSettingsActivity o-- com.code.group3finalproject.databinding.ActivityNotificationSettingsBinding : binding
+  com.code.group3finalproject.RSSFeedManager .up.|> com.code.group3finalproject.RSSManagerRecyclerViewAdapter.OnItemClickListener
+  com.code.group3finalproject.RSSFeedManager -up-|> androidx.appcompat.app.AppCompatActivity
+  com.code.group3finalproject.RSSFeedManager o-- com.code.group3finalproject.RSSManagerRecyclerViewAdapter : RSSManagerRecycleFeed
+  com.code.group3finalproject.RSSFeedManager o-- com.code.group3finalproject.RSSClasses.RSSManagedClasses : feedManager
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter o-- com.code.group3finalproject.RSSFeedRecyclerViewAdapter.OnItemClickListener : RSSClickListener
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter +-down- com.code.group3finalproject.RSSFeedRecyclerViewAdapter.OnItemClickListener
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter +-down- com.code.group3finalproject.RSSFeedRecyclerViewAdapter.ViewHolder
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter.ViewHolder .up.|> android.view.View.OnClickListener
+  com.code.group3finalproject.RSSFeedRecyclerViewAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter -up-|> androidx.recyclerview.widget.RecyclerView.Adapter
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter o-- com.code.group3finalproject.RSSManagerRecyclerViewAdapter.OnItemClickListener : RSSClickListener
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter +-down- com.code.group3finalproject.RSSManagerRecyclerViewAdapter.OnItemClickListener
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter +-down- com.code.group3finalproject.RSSManagerRecyclerViewAdapter.ViewHolder
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter.ViewHolder .up.|> android.view.View.OnClickListener
+  com.code.group3finalproject.RSSManagerRecyclerViewAdapter.ViewHolder -up-|> androidx.recyclerview.widget.RecyclerView.ViewHolder
+  com.code.group3finalproject.StockDetailActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.code.group3finalproject.StockDetailActivity +-down- com.code.group3finalproject.StockDetailActivity.STOCK_COMMAND
+  com.code.group3finalproject.StockDetailActivity +-down- com.code.group3finalproject.StockDetailActivity.StockAPITask
+  com.code.group3finalproject.StockDetailActivity +-down- com.code.group3finalproject.StockDetailActivity.StockQuotesAPI
+  com.code.group3finalproject.StockDetailActivity.StockAPITask -up-|> android.os.AsyncTask
+  com.code.group3finalproject.StockDetailActivity.StockAPITask o-- com.code.group3finalproject.StockDetailActivity.STOCK_COMMAND : command
+  com.code.group3finalproject.StockDetailActivity.StockQuotesAPI -up-|> android.os.AsyncTask
+  com.code.group3finalproject.fetchRSSFeeds -up-|> android.os.AsyncTask
+  com.code.group3finalproject.fetchRSSFeeds o-- com.code.group3finalproject.RSSClasses.RSSManagedClasses : manager
+  com.code.group3finalproject.fetchRSSFeeds o-- com.code.group3finalproject.RSSFeedRecyclerViewAdapter : recyclerAdapter
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
