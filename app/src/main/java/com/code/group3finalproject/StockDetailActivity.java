@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -28,6 +29,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,19 +111,19 @@ public class StockDetailActivity extends AppCompatActivity {
                 if (intradayPrices.isEmpty()) {
                     intradayPrices = getStockIntraday();
                 }
-                generateGraph(graph, startDate, intradayPrices);
+                generateGraph(graph, startDate, intradayPrices, true);
                 return;
             }else if (historyPrices.isEmpty()) {
                 historyPrices = getStockHistories();
             }
-            generateGraph(graph, startDate, historyPrices);
+            generateGraph(graph, startDate, historyPrices, false);
         });
 
         intradayPrices = getStockIntraday();
         Calendar date = getCurrentDate();
         date.add(Calendar.DAY_OF_YEAR, -1);
         Date startDate = date.getTime();
-        generateGraph(graph, startDate, intradayPrices);
+        generateGraph(graph, startDate, intradayPrices, true);
         populateQuotes();
 
         TextView stockSymbolTextView = (TextView) findViewById(R.id.stock_symbol);
@@ -215,7 +217,7 @@ public class StockDetailActivity extends AppCompatActivity {
      * @param startDate
      * @param stockPrices
      */
-    private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices) {
+    private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices, boolean intraday) {
         ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
         if (stockPrices.isEmpty()) {
             return;
@@ -227,7 +229,7 @@ public class StockDetailActivity extends AppCompatActivity {
         Date minDate = stockPrices.get(stockPrices.size()-1).first;
 
         for (Pair<Date, Double> datePrice : stockPrices) {
-            if (datePrice.first.compareTo(startDate) >= 0) {
+            if (intraday || datePrice.first.compareTo(startDate) >= 0) {
                 if (dps.isEmpty()) {
                     minDate = datePrice.first;
                 }
@@ -240,9 +242,22 @@ public class StockDetailActivity extends AppCompatActivity {
         //TODO the graph need to be seriously tuned.
         LineGraphSeries <DataPoint> series = new LineGraphSeries<DataPoint>(dps.toArray(new DataPoint[0]));
         graph.addSeries(series);
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StockDetailActivity.this));
-        graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        if (intraday) {
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        return formatter.format(value);
+                    }
+                    return super.formatLabel(value, isValueX);
+                }
+            });
 
+        } else {
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(StockDetailActivity.this));
+        }
+        graph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
         graph.getViewport().setMinX(minDate.getTime());
         graph.getViewport().setMaxX(maxDate.getTime()+1);
         graph.getViewport().setMaxY(maxPrice*1.1);
