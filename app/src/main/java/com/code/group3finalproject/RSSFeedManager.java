@@ -28,7 +28,11 @@ public class RSSFeedManager extends AppCompatActivity implements  RSSManagerRecy
     private RSSManagerRecyclerViewAdapter RSSManagerRecycleFeed;
     private RSSManagedClasses feedManager = null;
 
-
+    /**
+     * On create for class
+     * Loads and displys the managed feeds
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,10 @@ public class RSSFeedManager extends AppCompatActivity implements  RSSManagerRecy
         mySnackbar.show();
     }
 
-
+    /**
+     * function that returns to the RSS News feed
+     * @param view
+     */
     public void returnToRSSFeed(View view){
         Log.d("MessageTag","returning to main");
         Intent intent = new Intent(this,MainActivity.class);

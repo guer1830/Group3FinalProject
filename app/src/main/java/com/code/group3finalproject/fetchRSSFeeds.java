@@ -29,17 +29,36 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
     private ProgressDialog pDialog;
     private ProgressBar pBar;
 
+    /**
+     * Constructor
+     * @param adapter
+     * This adapter is used to update the recycler view
+     * @param manager
+     * This RSSManagedClasses object is used to identify which objects to
+     * fetch
+     * @param pBar
+     * A reference to a progressbar
+     */
     public fetchRSSFeeds(RSSFeedRecyclerViewAdapter adapter, RSSManagedClasses manager, ProgressBar pBar){
         this.recyclerAdapter = adapter;
         this.manager = manager;
         this.pBar = pBar;
     }
 
+    /**
+     * Set the visibility of the progress bar to visible
+     */
     @Override
     protected void onPreExecute() {
         pBar.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Downloads all included feeds
+     * @param voids
+     * @return
+     * Returns a boolean indicating success
+     */
     @Override
     protected Boolean doInBackground(Void... voids) {
         this.recyclerObjects = new ArrayList<>();
@@ -59,14 +78,17 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
             Log.e("Error","Error",e);
         }
 
-        //Sort the feed based on the publication date
+        //Sort the feeds randomly
         Collections.shuffle(recyclerObjects);
 
 
         return false;
     }
 
-
+    /**
+     * Sets the adapter date and makes the progress bar invisible
+     * @param success
+     */
     @Override
     protected void onPostExecute(Boolean success) {
         //Set the recylcer adapters data to the retrieved data
@@ -75,6 +97,14 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         pBar.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Parsing class for the XML feed
+     * @param inputStream
+     * @param RSSFeed
+     * @return
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
     public ArrayList<RSSNewsObject> parseXMLFeed(InputStream inputStream, RSSNewsFeed RSSFeed) throws XmlPullParserException, IOException {
         String title = null;
         String description = null;
@@ -182,7 +212,16 @@ public class fetchRSSFeeds extends AsyncTask<Void, Void, Boolean> {
         return answerArr;
     }
 
-
+    /**
+     * This function tests if a newsfeed object is completed
+     * @param object
+     * @param title
+     * @param description
+     * @param articleLink
+     * @param imageLink
+     * @param publicationDate
+     * @return
+     */
     private Boolean checkIfObjectIsReady(RSSNewsObject object, String title, String description, String articleLink, String imageLink, String publicationDate){
         boolean isReady = true;
         if (object.isTitleRequired()){

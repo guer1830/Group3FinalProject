@@ -32,12 +32,25 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
     private OnItemClickListener RSSClickListener;
     private Context currentContext;
 
+    /**
+     * Constructor
+     * @param context
+     * Sets the context variable
+     * @param data
+     * An Arraylist of RRSNewsOjects that will be displayed in the recycler view
+     */
     public RSSFeedRecyclerViewAdapter(Context context, ArrayList<RSSNewsObject> data){
         this.RSSInflater = LayoutInflater.from(context);
         this.recyclerData = data;
         this.currentContext = context;
     }
 
+    /**
+     * Function that inflates row item layouts
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @NotNull
     @Override
@@ -46,6 +59,12 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
         return new ViewHolder(view);
     }
 
+    /**
+     * Function that binds the row layout elements to the
+     * appropriate values
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         RSSNewsObject myObj = recyclerData.get(position);
@@ -57,6 +76,11 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
         holder.RecyclerImageView.setImageBitmap(getRandomImage());
     }
 
+    /**
+     * Function that returns the number of rows in the recycler view
+     * @return
+     * An integer value
+     */
     @Override
     public int getItemCount() {
         if(recyclerData == null){
@@ -77,6 +101,10 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * Handle row item click
+         * @param v
+         */
         @Override
         public void onClick(View v) {
 
@@ -88,6 +116,11 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
         }
     }
 
+    /**
+     * Gets the data item at the inputted index
+     * @param id
+     * @return
+     */
     RSSNewsObject getItem(int id){
         return recyclerData.get(id);
     }
@@ -96,6 +129,10 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
         this.RSSClickListener = itemClickListener;
     }
 
+    /**
+     * Sets the recycler view data
+     * @param data
+     */
     public void setData(ArrayList<RSSNewsObject> data){
         this.recyclerData = data;
         notifyDataSetChanged();
@@ -106,6 +143,10 @@ public class RSSFeedRecyclerViewAdapter extends RecyclerView.Adapter<RSSFeedRecy
     }
 
 
+    /**
+     * Function that loads a random bitmap image from the resources folder
+     * @return
+     */
     public Bitmap getRandomImage(){
         ArrayList<Object> images = new ArrayList<>(
                 Arrays.asList(R.drawable.big_city,
