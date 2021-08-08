@@ -1,0 +1,189 @@
+@startuml
+
+title __FEEDS's Class Diagram__\n
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.CNNBusiness {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + CNNBusiness()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.CNNFinance {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + CNNFinance()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.CNNWealth {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + CNNWealth()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.FinancialTimes {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + FinancialTimes()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.Fortune {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + Fortune()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.Investing {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + Investing()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  namespace com.code.group3finalproject {
+    namespace RSSClasses {
+      namespace Feeds {
+        class com.code.group3finalproject.RSSClasses.Feeds.YahooFinance {
+            - RSSFeedURL : String
+            - includeFeed : Boolean
+            - name : String
+            + YahooFinance()
+            + getDescriptionTag()
+            + getHyperLinkTag()
+            + getImageLinkTag()
+            + getIncludeFeed()
+            + getItemTag()
+            + getPublicationDateTag()
+            + getRSSFeedName()
+            + getRSSFeedURL()
+            + getTitleTag()
+        }
+      }
+    }
+  }
+  
+
+  com.code.group3finalproject.RSSClasses.Feeds.CNNBusiness .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.CNNBusiness -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.CNNFinance .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.CNNFinance -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.CNNWealth .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.CNNWealth -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.FinancialTimes .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.FinancialTimes -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.Fortune .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.Fortune -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.Investing .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.Investing -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+  com.code.group3finalproject.RSSClasses.Feeds.YahooFinance .up.|> java.io.Serializable
+  com.code.group3finalproject.RSSClasses.Feeds.YahooFinance -up-|> com.code.group3finalproject.RSSClasses.RSSNewsFeed
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

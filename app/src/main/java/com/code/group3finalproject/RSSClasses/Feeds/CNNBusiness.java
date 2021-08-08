@@ -6,12 +6,18 @@ import com.code.group3finalproject.RSSClasses.RSSNewsFeed;
 
 import java.io.Serializable;
 
+/**
+ * The type Cnn business.
+ */
 public class CNNBusiness extends RSSNewsFeed implements Serializable {
 
     private String RSSFeedURL;
     private Boolean includeFeed;
     private String name;
 
+    /**
+     * Instantiates a new Cnn business.
+     */
     public CNNBusiness(){
         super();
         this.RSSFeedURL = "https://www.cnbc.com/id/10001147/device/rss/rss.html";

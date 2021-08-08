@@ -1,0 +1,191 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": ""
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false // root node is included
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.code.group3finalproject.db.StockDatabase"
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_3059181 { 
+   	label=code
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2013106664 { 
+   	label=group3finalproject
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   Stock863291492[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Stock</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   symbol: String [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDAO_Impl1943224517[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDAO_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   __db: RoomDatabase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __deletionAdapterOfStock: EntityDeletionOrUpdateAdapter&lt;Stock&gt; [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   __insertionAdapterOfStock: EntityInsertionAdapter&lt;Stock&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ count(): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ delete(stock: Stock...)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insert(stock: Stock...)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ searchValue(stockSymbol: String): LiveData&lt;List&lt;Stock&gt;&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabase1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabase</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(context: Context): StockDatabase</TD></TR>
+<TR><TD ALIGN="LEFT" >- populateInitialData()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabaseTest1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabaseTest</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   db: StockDatabase [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   instantTaskExecutorRule: InstantTaskExecutorRule [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   stockDAO: StockDAO [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   stockSymbol: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ insertAndDeleteMultipleStocks()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertAndDeleteStock()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ insertAndReadStock()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ itemCount()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ tearDown()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+StockDatabase_Impl1798959967[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)StockDatabase_Impl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   _stockDAO: StockDAO [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ clearAllTables()</TD></TR>
+<TR><TD ALIGN="LEFT" ># createInvalidationTracker(): InvalidationTracker</TD></TR>
+<TR><TD ALIGN="LEFT" ># createOpenHelper(configuration: DatabaseConfiguration): SupportSQLiteOpenHelper</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+StockDAO_Impl1943224517 -> Stock863291492[label="__deletionAdapterOfStock
+[0..1]"];
+StockDAO_Impl1943224517 -> Stock863291492[label="__insertionAdapterOfStock
+[0..1]"];
+StockDatabase1798959967 -> StockDatabase_Impl1798959967[arrowhead=none, arrowtail=empty, dir=both];
+StockDatabaseTest1798959967 -> StockDatabase1798959967[label="db
+[0..1]"];
+StockDatabase_Impl1798959967 -> StockDAO_Impl1943224517[arrowhead=none, arrowtail=empty, dir=both];
+    
+}
+@enduml
