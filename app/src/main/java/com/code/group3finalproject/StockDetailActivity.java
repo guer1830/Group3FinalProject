@@ -220,6 +220,7 @@ public class StockDetailActivity extends AppCompatActivity {
     private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices, boolean intraday) {
         ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
         if (stockPrices.isEmpty()) {
+            Toast.makeText(StockDetailActivity.this,"Exceeding rate limit of AlphaAdvantage API (5 per minute)",Toast.LENGTH_LONG).show();
             return;
         }
 
