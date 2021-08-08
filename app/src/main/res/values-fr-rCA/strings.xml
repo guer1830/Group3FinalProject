@@ -26,9 +26,13 @@
     <string name="instructions_title">les directives</string>
     <string name="help_dialog_title">Aide</string>
     <string name="button_ok_text">d\'accord</string>
-    <string name="app_version">1.0</string>
-    <string name="app_instructions_description">TODO - les directives</string>
-    <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
+    <string name="app_version">\t1.0</string>
+    <string name="app_instructions_description">"Cette application vous permet de suivre les stocks.
+        \nTu dois\n\tSélectionnez l\'onglet Actualités pour obtenir les dernières actualités boursières
+        \n\tSélectionnez l\'onglet Stocks pour ajouter et afficher une liste de stocks personnalisée
+        \n\tSélectionnez l'onglet Notifications pour voir les activités récentes effectuées sur l\'application
+        \n\tet mises à jour correspondantes"</string>
+    <string name="app_authors_description">\tAamir Khimani\n\tJeffrey Guernsey\n\tLalithambal Swaminathan\n\tNivedhitha Govindaraj\n\tYunfei CUI</string>
     <string name="app_instructions">les directives d\'application</string>
     <string name="add_stock_search">Chercher</string>
     <string name="notification_Settings_notifcation_title">la déclaration</string>

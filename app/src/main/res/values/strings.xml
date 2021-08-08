@@ -26,9 +26,9 @@
     <string name="instructions_title">Instructions</string>
     <string name="help_dialog_title">Help</string>
     <string name="button_ok_text">OK</string>
-    <string name="app_version">1.0</string>
-    <string name="app_instructions_description">TODO - Instructions</string>
-    <string name="app_authors_description">Aamir Khimani\nJeffrey Guernsey\nLalithambal Swaminathan\nNivedhitha Govindaraj\nYunfei CUI</string>
+    <string name="app_version">\t1.0</string>
+    <string name="app_instructions_description">This app lets you to track down stocks.\nYou got to \n\t1.Select News tab for getting latest stock news \n\t2.Select Stocks tab for adding and viewing custom stock list \n\t3.Select Notificatons tab for seeing the recent activities made on the app\n\tand corresponding updates</string>
+    <string name="app_authors_description">\tAamir Khimani\n\tJeffrey Guernsey\n\tLalithambal Swaminathan\n\tNivedhitha Govindaraj\n\tYunfei CUI</string>
     <string name="app_instructions">App Instructions</string>
     <string name="add_stock_search">Search</string>
     <string name="notification_Settings_notifcation_title">Notification</string>
