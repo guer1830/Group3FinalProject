@@ -38,6 +38,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+
+/**
+ * This class consists of methods to query the AlphaAdvantage API for stock quotes and stock
+ * histories, which are then be used to generate chart. The API is done with the help of a async
+ * class. This is to prevent any issue blocking the main ui thread.
+ * Furthermore, it allows the user to select and view different timeframe for the stock price
+ * histories.
+ */
 public class StockDetailActivity extends AppCompatActivity {
 
     enum STOCK_COMMAND {
@@ -48,7 +56,6 @@ public class StockDetailActivity extends AppCompatActivity {
 
     private List<Pair<Date, Double>> historyPrices =new ArrayList<Pair<Date, Double>>();
     private List<Pair<Date, Double>> intradayPrices =new ArrayList<Pair<Date, Double>>();
-
     final static private String API_HISTORY_JSON_KEY = "Time Series (Daily)";
     final static private String API_INTRADAY_JSON_KEY = "Time Series (5min)";
     final static private String API_CLOSE_PRICE = "4. close";
@@ -122,6 +129,11 @@ public class StockDetailActivity extends AppCompatActivity {
         stockSymbolTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
     }
 
+    /**
+     * This method calls the AlphaAdvantage API to get a list of price histories for the given
+     * stock symbol
+     * @return list of dates and prices
+     */
     protected List<Pair<Date, Double>> getStockHistories() {
         try {
             List<Pair<Date, Double>> histories = (List<Pair<Date, Double>>) new StockAPITask(stockSymbol, STOCK_COMMAND.HISTORY).execute().get();
@@ -135,6 +147,11 @@ public class StockDetailActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
+    /**
+     * This method calls the AlphaAdvantage API to get a list of intraday prices for the given
+     * stock symbol
+     * @return list of dates and prices
+     */
     protected List<Pair<Date, Double>> getStockIntraday() {
         try {
             List<Pair<Date, Double>> intraday = (List<Pair<Date, Double>>) new StockAPITask(stockSymbol, STOCK_COMMAND.INTRADAY).execute().get();
@@ -148,6 +165,10 @@ public class StockDetailActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
+    /**
+     * generate a Calendar class for current day
+     * @return current day Calendar
+     */
     protected Calendar getCurrentDate() {
         Calendar date = new GregorianCalendar();
         // reset hour, minutes, seconds and millis
@@ -158,6 +179,10 @@ public class StockDetailActivity extends AppCompatActivity {
         return date;
     }
 
+    /**
+     * This method calls the AlphaAdvantage stock quotes API and populate them in the ui
+     * It will also show a Toast if the API rate limit is exceeded
+     */
     protected void populateQuotes() {
         try {
             JSONObject quotes = (JSONObject) new StockQuotesAPI(stockSymbol).execute().get();
@@ -183,6 +208,13 @@ public class StockDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method uses the stock prices to generate a chart in the UI with the choice of different
+     * timeframe.
+     * @param graph
+     * @param startDate
+     * @param stockPrices
+     */
     private void generateGraph(GraphView graph, Date startDate, List<Pair<Date, Double>> stockPrices) {
         ArrayList<DataPoint> dps = new ArrayList<DataPoint>();
         if (stockPrices.isEmpty()) {
@@ -219,14 +251,26 @@ public class StockDetailActivity extends AppCompatActivity {
         graph.getGridLabelRenderer().setNumHorizontalLabels(10);
     }
 
+    /**
+     * This method is used to return to the previous view
+     * @param view
+     */
     public void returnToMainView(View view){
         Log.d("StockDetailView","returning to main");
         finish();
     }
 
+    /**
+     * This class provides methods to send request to AlphaAdvantage API to get stock quote and then
+     * parse them into JSON message for the Activity to consume.
+     */
     protected static class StockQuotesAPI extends AsyncTask<Void, Void, JSONObject> {
         String symbol;
 
+        /**
+         * This is the constructor of StockQuotesAPI
+         * @param symbol stock symbol
+         */
         StockQuotesAPI(String symbol) {
             // list all the parameters like in normal class define
             this.symbol = symbol;
@@ -237,11 +281,21 @@ public class StockDetailActivity extends AppCompatActivity {
             super.onPostExecute(s);
         }
 
+        /**
+         * This method is calling the main doWork() method, where reqeust are being sent and parsed
+         * @param params
+         * @return
+         */
         @Override
         protected JSONObject doInBackground(Void... params) {
             return doWork();
         }
 
+        /**
+         * This is the main function of this async class. It queries the AlphaAdvantage API for stock
+         * quotes and genreate a JsonObject from it.
+         * @return
+         */
         protected JSONObject doWork() {
             String api = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + this.symbol + "&apikey=" + APIKeys.get(count++ % APIKeys.size());
 
@@ -268,10 +322,19 @@ public class StockDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This class provides methods to send request to AlphaAdvantage API to get stock histories and then
+     * parse them into JSON message for the Activity to consume.
+     */
     protected static class StockAPITask extends AsyncTask<Void, Void, Object> {
         String symbol;
         STOCK_COMMAND command;
 
+        /**
+         * This is the constructor of StockQuotesAPI
+         * @param symbol  stock symbol
+         * @param command  STOCK_COMMAND
+         */
         StockAPITask(String symbol, STOCK_COMMAND command) {
             // list all the parameters like in normal class define
             this.symbol = symbol;
@@ -283,11 +346,21 @@ public class StockDetailActivity extends AppCompatActivity {
             super.onPostExecute(s);
         }
 
+        /**
+         * This method is calling the main doWork() method, where reqeust are being sent and parsed
+         * @param params
+         * @return
+         */
         @Override
         protected Object doInBackground(Void... params) {
             return doWork();
         }
 
+        /**
+         * This is the main function of this async class. It queries the AlphaAdvantage API for stock
+         * histories and genreate a JsonObject from it.
+         * @return
+         */
         protected Object doWork() {
             List<Pair<Date, Double>> datePrices =new ArrayList<Pair<Date, Double>>();
             String api = "";
