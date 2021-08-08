@@ -31,20 +31,17 @@ import java.util.List;
 public class AddStockActivity extends AppCompatActivity {
     private static String TAG = "AddStockActivity";
     private AutoCompleteTextView SearchText;
-    String company_Symbol;
-    String stockURL;
-    String Name;
-    String Symbol;
     String changedText;
     static List<String>stockSymbolList;
     static List<String>stockNameList = new ArrayList<String>();
     ArrayList<String> APIKeys = new ArrayList<>(List.of("A17S0FRD7LSUFI01","0VLLM0XI2K69R9S1","P8QLY30TBO83QJV6","VOWL05S70F9AHQQD","9MLT1AHK8DK9J45Y","6U3CR4XTV8H80PTS"));
     int count = 0;
-
-
-
     public static final String EXTRA_REPLY = "com.code.group3finalproject.AddStockActivity.REPLY";
-
+    /**
+     * On create for class
+     * Loads and displays the required stock list upon typing
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +52,16 @@ public class AddStockActivity extends AppCompatActivity {
         SearchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            }
-
+            }
+            /**
+             *
+             * function that returns to the API after text changes
+             * @param s
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 String text = SearchText.getText().toString();
@@ -73,7 +73,7 @@ public class AddStockActivity extends AppCompatActivity {
                 stockSymbolList.clear();
                 //}
                 if(count < APIKeys.size() * 5) {
-                    new GetContacts(changedText, APIKeys.get(count/5)).execute();
+                    new GetStocks(changedText, APIKeys.get(count/5)).execute();
                     count++;
                 } else {
                     count = 0;
@@ -85,12 +85,19 @@ public class AddStockActivity extends AppCompatActivity {
         });
 
     }
-
-    protected  class GetContacts extends AsyncTask<Void, Void, Void> {
+    /**
+     * This class provides methods to send request to AlphaAdvantage API to get stock symbols and then
+     * parse them into JSON message for the Activity to consume.
+     */
+    protected  class GetStocks extends AsyncTask<Void, Void, Void> {
         String changedText;
         String apiKey;
-
-        GetContacts(String changedText, String API) {
+        /**
+         * This is the constructor of GetStocks
+         * @param changedText stock symbol
+         * @param API for api keys
+         */
+        GetStocks(String changedText, String API) {
              this.changedText = changedText;
              this.apiKey = API;
 
@@ -99,6 +106,12 @@ public class AddStockActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
         }
+        /**
+         * This method is calling the main doBGWork() method, where request are being sent,
+         * parsed and added to stockSymbolList
+         * @param arg0
+         * @return
+         */
 
         @Override
         protected Void doInBackground(Void... arg0) {
@@ -116,10 +129,16 @@ public class AddStockActivity extends AppCompatActivity {
                 Log.i(TAG, "stockSymbolSIZE......." + stockSymbolList.size());
 
             } catch(Exception e) {
-                //
+                Log.e(TAG, "Json exception: " + e.getMessage());
             }
             return null;
         }
+        /**
+         * This method sets the stockSymbolList to the Array adapter
+         * and notifies the adapter on stock list change
+         * @param result
+         * @return
+         */
 
         @Override
         protected void onPostExecute(Void result) {
@@ -132,10 +151,14 @@ public class AddStockActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }
 
+        /**
+         * function that returns to the best matched Stocks from API
+         *
+         */
         protected JSONArray doBGWork() {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            //Log.i("AddStockActivity","url fetching");
+            Log.i("AddStockActivity","url fetching");
             String url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=" + this.changedText +"&apikey=" + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
@@ -144,30 +167,19 @@ public class AddStockActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("bestMatches");
-                    return contacts;
-                    // looping through All Contacts
+                    JSONArray stocks = jsonObj.getJSONArray("bestMatches");
+                    return stocks;
 
                 } catch (final JSONException e) {
-                    //Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
                 }
 
             } else {
-                //Log.e(TAG, "Couldn't get json from server.");
+                Log.e(TAG, "Couldn't get json from server.");
             }
 
             return null;
         }
-    }
-
-
-
-    public void parseJSON(String response) throws JSONException {
-        JSONObject jsonObj = new JSONObject(response);
-        JSONObject result = jsonObj.getJSONObject("result");
-        Name = result.getString("Name");
-        Symbol = result.getString("Symbol");
-
     }
 
     public void addStockButton_OnClick(View view) {

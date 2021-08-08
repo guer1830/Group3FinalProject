@@ -12,14 +12,21 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-
-
 public class HttpHandler {
 
     private static final String TAG = HttpHandler.class.getSimpleName();
-
+    /**
+     * Constructor
+     *
+     */
     public HttpHandler() {
     }
+
+    /**
+     * This function makes service call with the requested URL and gets the response
+     * @param reqUrl
+     * @return response
+     */
 
     public String makeServiceCall(String reqUrl) {
         String response = null;
@@ -41,6 +48,11 @@ public class HttpHandler {
         }
         return response;
     }
+    /**
+     * This function converts the response to string format using string builder
+     * @param is
+     * @return sb string
+     */
 
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -65,5 +77,3 @@ public class HttpHandler {
     }
 
 }
-
-//Ref: https://www.tutorialspoint.com/android/android_json_parser.htm

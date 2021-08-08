@@ -24,7 +24,7 @@ class TestAddStockActivity {
     @Test
     public void testValidStockQuotes () {
         activityRule.getScenario().onActivity(activity -> {
-            JSONArray stock = new AddStockActivity().new GetContacts(":","6U3CR4XTV8H80PTS").doBGWork();
+            JSONArray stock = new AddStockActivity().new GetStocks(":","6U3CR4XTV8H80PTS").doBGWork();
         });
     }
 }
